@@ -5,12 +5,12 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
     const [formState, setFormState] = useState({
         mapName: '',
         port: '',
-        gameMode: 'Survival', // 선택된 모드 저장
+        gameMode: 'Survival',
         jarFile: null,
         minHeap: '',
         maxHeap: '',
     });
-    const [isPortValid, setIsPortValid] = useState(null); // Null: 확인 안 됨, true: 사용 가능, false: 중복
+    const [isPortValid, setIsPortValid] = useState(null);
 
     const handleCheckDuplicate = async () => {
         if (!formState.port) {
@@ -18,8 +18,7 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
             return;
         }
 
-        // 중복 확인 로직 (예: API 호출 대신 가상 데이터 사용)
-        const duplicatePorts = [25565, 25566, 25567]; // 중복된 포트 예제
+        const duplicatePorts = [25565, 25566, 25567];
         const isDuplicate = duplicatePorts.includes(parseInt(formState.port, 10));
 
         setIsPortValid(!isDuplicate);
@@ -37,6 +36,14 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
+
+        if (name === 'port' || name === 'minHeap' || name === 'maxHeap') {
+            if (!/^\d*$/.test(value)) {
+                alert('Only numeric values are allowed.');
+                return;
+            }
+        }
+
         setFormState({
             ...formState,
             [name]: files ? files[0] : value,
@@ -45,10 +52,32 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!formState.gameMode) {
             alert('Please select a game mode.');
             return;
         }
+
+        if (isPortValid === null) {
+            alert('Please check port availability before creating the room.');
+            return;
+        }
+
+        if (!isPortValid) {
+            alert('The selected port number is invalid. Please choose a valid port.');
+            return;
+        }
+
+        if (parseInt(formState.minHeap, 10) > parseInt(formState.maxHeap, 10)) {
+            alert('Min Heap Memory cannot be greater than Max Heap Memory.');
+            return;
+        }
+
+        if (formState.port === '' || formState.minHeap === '' || formState.maxHeap === '') {
+            alert('Please fill out all required fields.');
+            return;
+        }
+
         onCreateRoom(formState);
     };
 
