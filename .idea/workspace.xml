@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="팝업 창 중복 확인 버튼 생성">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <change afterPath="$PROJECT_DIR$/frontend/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mcjarswap.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mcjarswap.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,18 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ChabinHwang"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ChabinHwang&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ChabinHwang/McJarSwap.git",
-    "accountId": "2caaa3be-96de-4118-af5d-e78bffddb75d"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ChabinHwang/McJarSwap.git&quot;,
+    &quot;accountId&quot;: &quot;2caaa3be-96de-4118-af5d-e78bffddb75d&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -51,21 +53,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "settings.sync",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Chabin Hwang/Desktop/Git/McJarSwap/frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.3.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Chabin Hwang\Desktop\Git\McJarSwap\frontend\src\font" />
@@ -87,7 +90,10 @@
       <option name="presentableId" value="Default" />
       <updated>1737540642572</updated>
       <workItem from="1737540645361" duration="704000" />
-      <workItem from="1737541361615" duration="10123000" />
+      <workItem from="1737541361615" duration="16428000" />
+      <workItem from="1737564359642" duration="54000" />
+      <workItem from="1737564448576" duration="270000" />
+      <workItem from="1737564728020" duration="16000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -129,11 +135,54 @@
       <option name="project" value="LOCAL" />
       <updated>1737550288515</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Alert 수정">
+      <option name="closed" value="true" />
+      <created>1737552944562</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737552944562</updated>
+    </task>
+    <task id="LOCAL-00007" summary="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <option name="closed" value="true" />
+      <created>1737564029629</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1737564029629</updated>
+    </task>
+    <task id="LOCAL-00008" summary="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <option name="closed" value="true" />
+      <created>1737564041242</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1737564041242</updated>
+    </task>
+    <task id="LOCAL-00009" summary="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <option name="closed" value="true" />
+      <created>1737564680242</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1737564680242</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
@@ -141,6 +190,8 @@
     <MESSAGE value="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정" />
     <MESSAGE value="SettingsScreen.js Close 버튼 수정" />
     <MESSAGE value="팝업 창 중복 확인 버튼 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="팝업 창 중복 확인 버튼 생성" />
+    <MESSAGE value="Alert 수정" />
+    <MESSAGE value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
+    <option name="LAST_COMMIT_MESSAGE" value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
   </component>
 </project>
