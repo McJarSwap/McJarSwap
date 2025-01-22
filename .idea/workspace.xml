@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="팝업 창 중복 확인 버튼 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/axios.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1737540642572</updated>
       <workItem from="1737540645361" duration="704000" />
-      <workItem from="1737541361615" duration="10123000" />
+      <workItem from="1737541361615" duration="16123000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -129,7 +128,23 @@
       <option name="project" value="LOCAL" />
       <updated>1737550288515</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Alert 수정">
+      <option name="closed" value="true" />
+      <created>1737552944562</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737552944562</updated>
+    </task>
+    <task id="LOCAL-00007" summary="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
+      <option name="closed" value="true" />
+      <created>1737564029629</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1737564029629</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,6 +156,8 @@
     <MESSAGE value="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정" />
     <MESSAGE value="SettingsScreen.js Close 버튼 수정" />
     <MESSAGE value="팝업 창 중복 확인 버튼 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="팝업 창 중복 확인 버튼 생성" />
+    <MESSAGE value="Alert 수정" />
+    <MESSAGE value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
+    <option name="LAST_COMMIT_MESSAGE" value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
   </component>
 </project>
