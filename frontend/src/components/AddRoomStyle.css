@@ -124,7 +124,18 @@ h2{
 }
 button:hover {
      opacity: 0.9;
-}/* 버튼 활성화 상태 */
+}
 button:active {
     transform: scale(0.98);
+}
+.check-button-dup{
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f44336;
+    color: white;
+}
+.check-button-dup:hover{
+    opacity: 0.9;
 }

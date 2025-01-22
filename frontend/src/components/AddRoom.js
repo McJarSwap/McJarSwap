@@ -10,6 +10,26 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
         minHeap: '',
         maxHeap: '',
     });
+    const [isPortValid, setIsPortValid] = useState(null); // Null: 확인 안 됨, true: 사용 가능, false: 중복
+
+    const handleCheckDuplicate = async () => {
+        if (!formState.port) {
+            alert('Please enter a port number first.');
+            return;
+        }
+
+        // 중복 확인 로직 (예: API 호출 대신 가상 데이터 사용)
+        const duplicatePorts = [25565, 25566, 25567]; // 중복된 포트 예제
+        const isDuplicate = duplicatePorts.includes(parseInt(formState.port, 10));
+
+        setIsPortValid(!isDuplicate);
+
+        if (isDuplicate) {
+            alert('Port number is already in use. Please choose another one.');
+        } else {
+            alert('Port number is available.');
+        }
+    };
 
     const handleModeSelect = (mode) => {
         setFormState({ ...formState, gameMode: mode });
@@ -59,6 +79,13 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
                             required
                         />
                     </label>
+                    <button
+                        type="button"
+                        className="check-button-dup"
+                        onClick={handleCheckDuplicate}
+                    >
+                        Check Duplicate
+                    </button>
                     <div className="game-mode-buttons">
                         <h3>Select Game Mode</h3>
                         {['Survival', 'Creative', 'Adventure'].map((mode) => (
