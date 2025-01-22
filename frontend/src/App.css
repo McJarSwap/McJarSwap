@@ -34,4 +34,20 @@
   border: none;
   cursor: pointer;
 }
+@font-face {
+  font-family: 'Nico Moji';
+  src: url('./fonts/NicoMoji.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+  font-family: 'Nico Moji', sans-serif;
+}
+
 @import "~pretendard/dist/web/static/pretendard.css";
+.settings-radio-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}

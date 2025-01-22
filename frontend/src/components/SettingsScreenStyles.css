@@ -44,7 +44,7 @@
     margin-top: 10px;
 }
 
-.mode-button {
+.settings-group .mode-button {
     border: 2px solid #ccc;
     border-radius: 8px;
     padding: 8px 16px;
@@ -52,34 +52,36 @@
     cursor: pointer;
     transition: all 0.3s;
     margin-right: 5px;
+
+    color:  #000000;
 }
 
-.mode-button.selected {
+.settings-group .mode-button.selected {
     border-color: transparent;
     color: white;
 }
 
-.mode-button.survival {
+.settings-group .mode-button.survival {
     background-color: #f44336;
 }
 
-.mode-button.survival.selected {
+.settings-group .mode-button.survival.selected {
     background-color: #d32f2f;
 }
 
-.mode-button.creative {
+.settings-group .mode-button.creative {
     background-color: #2196f3;
 }
 
-.mode-button.creative.selected {
+.settings-group .mode-button.creative.selected {
     background-color: #1976d2;
 }
 
-.mode-button.adventure {
+.settings-group .mode-button.adventure {
     background-color: #4caf50;
 }
 
-.mode-button.adventure.selected {
+.settings-group .mode-button.adventure.selected {
     background-color: #388e3c;
 }
 
