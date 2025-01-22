@@ -1,0 +1,54 @@
+.room-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 14px; /* 카드 내부 여백 */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.room-card-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  align-items: center;
+}
+
+.room-info {
+  font-size: 14px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.port-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.delete-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 16px;
+}
+.delete-button img {
+    width: 80%; /* 부모 요소의 50% */
+    max-width: 30px; /* 최대 크기 */
+    height: auto; /* 가로/세로 비율 유지 */
+  }
+.mode-info {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.settings-button {
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}

@@ -1,0 +1,144 @@
+.settings-screen {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.settings-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.settings-group {
+    margin-bottom: 20px;
+    display: flex; /* 한 줄로 배치 */
+    align-items: center; /* 세로 정렬 */
+    justify-content: space-between; /* 텍스트와 버튼 간격 조정 */
+    gap: 10px; /* 버튼 간 간격 */
+}
+
+.settings-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.settings-input {
+    width: 70%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 10px 10px 0;
+}
+
+.settings-radio-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.mode-button {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 5px;
+}
+
+.mode-button.selected {
+    border-color: transparent;
+    color: white;
+}
+
+.mode-button.survival {
+    background-color: #f44336;
+}
+
+.mode-button.survival.selected {
+    background-color: #d32f2f;
+}
+
+.mode-button.creative {
+    background-color: #2196f3;
+}
+
+.mode-button.creative.selected {
+    background-color: #1976d2;
+}
+
+.mode-button.adventure {
+    background-color: #4caf50;
+}
+
+.mode-button.adventure.selected {
+    background-color: #388e3c;
+}
+
+.settings-save-button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.settings-save-button:hover {
+    background-color: #574ec9;
+}
+
+.jar-upload-button {
+    background-color: #9e9e9e;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.jar-upload-button:hover {
+    background-color: #757575;
+}
+
+.settings-close-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+    margin: 20px auto 0;
+    text-align: center;
+}
+
+.settings-close-button:hover {
+    background-color: #d32f2f;
+}
+
+.version-info-container {
+    display: flex;
+    flex-direction: column; /* 텍스트를 위아래로 배치 */
+    margin-right: auto; /* 텍스트를 왼쪽으로 정렬 */
+}
+
+.version-info {
+    font-size: 14px;
+    color: #555;
+}
+p {
+    margin: 3px 0 0 0; /* 기본 마진을 제거 */
+    padding: 0; /* 기본 패딩을 제거 */
+}
