@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import axiosInstance from "./api/axios";
 import Main from "./Main";
 import SettingsScreen from "./components/SettingsScreen";
 import "./App.css";
 
 const App = () => {
-    const [rooms, setRooms] = useState([
-        { name: "Room1", port: "12345", type: "Creative" },
-        { name: "Room2", port: "23456", type: "Survival" },
-        { name: "Room3", port: "34567", type: "Adventure" },
-    ]);
+    const [rooms, setRooms] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const fetchRooms = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axiosInstance.get("/");
+            const fetchedRooms = response.data.map((room) => ({
+                name: room.name,
+                port: room.port,
+                type: room.mode,
+            }));
+            setRooms(fetchedRooms);
+        } catch (error) {
+            console.error("Error fetching rooms:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // 컴포넌트 마운트 시 데이터 가져오기
+    useEffect(() => {
+        fetchRooms();
+    }, []);
 
     const addRoom = () => {
         setIsLoading(true); // 대기 화면 표시
