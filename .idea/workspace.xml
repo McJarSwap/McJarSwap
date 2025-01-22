@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="README.md 수정">
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/AddRoomStyle.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/fonts/NicoMoji.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +87,7 @@
       <option name="presentableId" value="Default" />
       <updated>1737540642572</updated>
       <workItem from="1737540645361" duration="704000" />
-      <workItem from="1737541361615" duration="5308000" />
+      <workItem from="1737541361615" duration="5811000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -111,7 +105,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737541382555</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정">
+      <option name="closed" value="true" />
+      <created>1737548272154</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1737548272154</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,6 +122,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="README.md 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="README.md 수정" />
+    <MESSAGE value="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정" />
   </component>
 </project>

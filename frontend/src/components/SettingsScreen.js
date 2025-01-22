@@ -9,6 +9,9 @@ const SettingsScreen = ({ onClose, initialMode, onSave }) => {
     const [port, setPort] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    const handleClose = () => {
+        navigate('/');
+    };
     const handleModeChange = (event) => {
         setSelectedMode(event.target.value);
     };
@@ -75,7 +78,7 @@ const SettingsScreen = ({ onClose, initialMode, onSave }) => {
                 <button className="settings-save-button" onClick={handleSave}>SAVE</button>
             </div>
 
-            <button className="settings-close-button" onClick={onClose}>Close</button>
+            <button className="settings-close-button" onClick={handleClose}>Close</button>
         </div>
     );
 };
