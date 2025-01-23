@@ -5,21 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="Frontend 개발 완료">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/templates/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/RoomCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoomCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/backend">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/backend">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -35,8 +58,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ChabinHwang/McJarSwap.git&quot;,
-    &quot;accountId&quot;: &quot;2caaa3be-96de-4118-af5d-e78bffddb75d&quot;
+    &quot;url&quot;: &quot;https://github.com/wvwwvv/McJarSwap.git&quot;,
+    &quot;accountId&quot;: &quot;5ddfe12b-6bf9-491b-9ac5-6ac564d1cd7e&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -57,9 +80,17 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Gradle.C:/study/McJarSwap/backend/build.gradle.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.McJarSwapApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Chabin Hwang/Desktop/Git/McJarSwap/frontend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -76,10 +107,45 @@
       <recent name="C:\Users\Chabin Hwang\Desktop\Git\McJarSwap\frontend\src\font" />
     </key>
   </component>
+  <component name="RunManager" selected="Spring Boot.McJarSwapApplication">
+    <configuration name="C:/study/McJarSwap/backend/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/backend/build.gradle" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="McJarSwapApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend.McJarSwap.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="McJarSwap.McJarSwapApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.C:/study/McJarSwap/backend/build.gradle" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23339.15" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -98,6 +164,8 @@
       <workItem from="1737564728020" duration="16000" />
       <workItem from="1737625406152" duration="410000" />
       <workItem from="1737625823522" duration="148000" />
+      <workItem from="1737628739592" duration="93000" />
+      <workItem from="1737628848921" duration="57000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
