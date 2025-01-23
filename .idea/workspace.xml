@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)">
-      <change afterPath="$PROJECT_DIR$/frontend/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mcjarswap.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mcjarswap.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="Frontend 개발 완료">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AddRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/RoomCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoomCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SettingsScreenStyles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +25,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -77,7 +79,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.222" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23339.15" />
       </set>
     </attachedChunks>
   </component>
@@ -94,6 +96,8 @@
       <workItem from="1737564359642" duration="54000" />
       <workItem from="1737564448576" duration="270000" />
       <workItem from="1737564728020" duration="16000" />
+      <workItem from="1737625406152" duration="410000" />
+      <workItem from="1737625823522" duration="148000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -167,7 +171,23 @@
       <option name="project" value="LOCAL" />
       <updated>1737564680242</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="axios.js 의 `baseURL` 지정">
+      <option name="closed" value="true" />
+      <created>1737625247675</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737625247675</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Frontend 개발 완료">
+      <option name="closed" value="true" />
+      <created>1737625771336</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1737625771336</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +212,8 @@
     <MESSAGE value="팝업 창 중복 확인 버튼 생성" />
     <MESSAGE value="Alert 수정" />
     <MESSAGE value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
-    <option name="LAST_COMMIT_MESSAGE" value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
+    <MESSAGE value="axios.js 의 `baseURL` 지정" />
+    <MESSAGE value="Frontend 개발 완료" />
+    <option name="LAST_COMMIT_MESSAGE" value="Frontend 개발 완료" />
   </component>
 </project>

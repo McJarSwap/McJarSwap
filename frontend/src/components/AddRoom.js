@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AddRoomStyle.css';
+import axiosInstance from "../api/axios";
 
 const AddRoom = ({ onClose, onCreateRoom }) => {
     const [formState, setFormState] = useState({
@@ -18,17 +19,40 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
             return;
         }
 
-        const duplicatePorts = [25565, 25566, 25567];
-        const isDuplicate = duplicatePorts.includes(parseInt(formState.port, 10));
+        // 입력 값이 숫자로만 이루어져 있는지 확인
+        if (!/^\d+$/.test(formState.port)) {
+            alert('Port number must contain only digits.');
+            return;
+        }
 
-        setIsPortValid(!isDuplicate);
+        const portNumber = parseInt(formState.port, 10);
 
-        if (isDuplicate) {
-            alert('Port number is already in use. Please choose another one.');
-        } else {
-            alert('Port number is available.');
+        // 포트 번호가 유효 범위를 벗어난 경우
+        if (portNumber < 0 || portNumber > 65535) {
+            alert('Port number must be between 0 and 65535.');
+            return;
+        }
+
+        try {
+            // GET 요청을 통해 백엔드로 포트 확인 요청
+            const response = await axiosInstance.get(`/checkup`, {
+                params: { port: portNumber }, // 쿼리 파라미터로 포트 번호 전달
+            });
+
+            // 서버 응답 처리
+            if (response.data.validate === "true") {
+                alert('Port number is available.');
+                setIsPortValid(true); // 포트 유효 상태 업데이트
+            } else {
+                alert('Port number is already in use. Please choose another one.');
+                setIsPortValid(false); // 포트 유효 상태 업데이트
+            }
+        } catch (error) {
+            console.error("Error checking port:", error);
+            alert("An error occurred while checking the port. Please try again.");
         }
     };
+
 
     const handleModeSelect = (mode) => {
         setFormState({ ...formState, gameMode: mode });
@@ -50,9 +74,10 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // 필수 검증 로직
         if (!formState.gameMode) {
             alert('Please select a game mode.');
             return;
@@ -78,7 +103,40 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
             return;
         }
 
-        onCreateRoom(formState);
+        // FormData 객체 생성 및 데이터 추가
+        const formData = new FormData();
+        formData.append("file", formState.jarFile); // JAR 파일
+        formData.append(
+            "data",
+            JSON.stringify({
+                port: formState.port,
+                name: formState.mapName,
+                mode: formState.gameMode,
+                xmx: formState.maxHeap,
+                xms: formState.minHeap,
+            })
+        );
+
+        try {
+            // POST 요청
+            const response = await axiosInstance.post(`/addroom`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data", // 멀티파트 데이터 형식 지정
+                },
+            });
+
+            // 서버 응답 처리
+            if (response.status === 200) {
+                alert("Room created successfully!");
+                onCreateRoom(formState); // 상위 컴포넌트에 알림
+                onClose(); // 팝업 닫기
+            } else {
+                alert("Failed to create room. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error creating room:", error);
+            alert("An error occurred while creating the room. Please try again.");
+        }
     };
 
     return (

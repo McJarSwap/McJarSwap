@@ -16,7 +16,7 @@
 }
 
 .settings-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex; /* 한 줄로 배치 */
     align-items: center; /* 세로 정렬 */
     justify-content: space-between; /* 텍스트와 버튼 간격 조정 */
@@ -35,7 +35,6 @@
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin: 0 10px 10px 0;
 }
 
 .settings-radio-group {
@@ -47,7 +46,7 @@
 .settings-group .mode-button {
     border: 2px solid #ccc;
     border-radius: 8px;
-    padding: 8px 16px;
+    padding: 8px 14px;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s;
@@ -94,7 +93,15 @@
     cursor: pointer;
     font-size: 14px;
 }
-
+.settings-save-button-dup{
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
 .settings-save-button:hover {
     background-color: #574ec9;
 }
