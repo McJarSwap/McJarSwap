@@ -4,13 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="Frontend 개발 완료">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/templates/main.html" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="gradle수정 및 MainController">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/Room.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +47,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -62,6 +68,9 @@
     &quot;accountId&quot;: &quot;5ddfe12b-6bf9-491b-9ac5-6ac564d1cd7e&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -81,6 +90,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.C:/study/McJarSwap/backend/build.gradle.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
@@ -165,7 +175,10 @@
       <workItem from="1737625406152" duration="410000" />
       <workItem from="1737625823522" duration="148000" />
       <workItem from="1737628739592" duration="93000" />
-      <workItem from="1737628848921" duration="57000" />
+      <workItem from="1737628848921" duration="7563000" />
+      <workItem from="1737689467254" duration="229000" />
+      <workItem from="1737689708991" duration="4595000" />
+      <workItem from="1737778295067" duration="4916000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -255,7 +268,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737625771336</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="gradle수정 및 MainController">
+      <option name="closed" value="true" />
+      <created>1737629103845</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1737629103845</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,6 +303,7 @@
     <MESSAGE value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
     <MESSAGE value="axios.js 의 `baseURL` 지정" />
     <MESSAGE value="Frontend 개발 완료" />
-    <option name="LAST_COMMIT_MESSAGE" value="Frontend 개발 완료" />
+    <MESSAGE value="gradle수정 및 MainController" />
+    <option name="LAST_COMMIT_MESSAGE" value="gradle수정 및 MainController" />
   </component>
 </project>
