@@ -1,5 +1,6 @@
-package McJarSwap;
+package McJarSwap.service;
 
+import McJarSwap.Room;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
