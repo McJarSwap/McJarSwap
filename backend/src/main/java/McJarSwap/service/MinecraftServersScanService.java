@@ -45,7 +45,7 @@ public class MinecraftServersScanService {
 
     private List<String> getPIDs() throws Exception {
         List<String> pids = new ArrayList<>();
-        String command = "ps aux | grep [M]cJarSwap | awk '{print $2}'";
+        String command = " \"unset $(compgen -v); ps aux | grep '[M]cJarSwap'  | awk '{print $2}'\"";
 
         ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
         Process process = processBuilder.start();
