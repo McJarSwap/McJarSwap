@@ -4,19 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="gradle수정 및 MainController">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/Room.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="feat:MinecraftServersScanService 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,13 +55,10 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/wvwwvv/McJarSwap.git&quot;,
-    &quot;accountId&quot;: &quot;5ddfe12b-6bf9-491b-9ac5-6ac564d1cd7e&quot;
+    &quot;url&quot;: &quot;https://github.com/bashdas/McJarSwap.git&quot;,
+    &quot;accountId&quot;: &quot;9d88217c-18ad-4426-981d-efab27ae0bef&quot;
   }
 }</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/backend/src/main/java/McJarSwap/controller/MainController.java" root0="SKIP_INSPECTION" />
-  </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -90,7 +78,6 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.C:/study/McJarSwap/backend/build.gradle.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
@@ -154,8 +141,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
       </set>
     </attachedChunks>
   </component>
@@ -175,10 +162,11 @@
       <workItem from="1737625406152" duration="410000" />
       <workItem from="1737625823522" duration="148000" />
       <workItem from="1737628739592" duration="93000" />
-      <workItem from="1737628848921" duration="7563000" />
-      <workItem from="1737689467254" duration="229000" />
-      <workItem from="1737689708991" duration="4595000" />
-      <workItem from="1737778295067" duration="4916000" />
+      <workItem from="1737628848921" duration="57000" />
+      <workItem from="1738110454971" duration="1882000" />
+      <workItem from="1738114668029" duration="1655000" />
+      <workItem from="1738227041621" duration="1192000" />
+      <workItem from="1738228824607" duration="1534000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -268,13 +256,13 @@
       <option name="project" value="LOCAL" />
       <updated>1737625771336</updated>
     </task>
-    <task id="LOCAL-00012" summary="gradle수정 및 MainController">
+    <task id="LOCAL-00012" summary="feat:MinecraftServersScanService 추가">
       <option name="closed" value="true" />
-      <created>1737629103845</created>
+      <created>1738110830649</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1737629103845</updated>
+      <updated>1738110830649</updated>
     </task>
     <option name="localTasksCounter" value="13" />
     <servers />
@@ -303,7 +291,7 @@
     <MESSAGE value="홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)" />
     <MESSAGE value="axios.js 의 `baseURL` 지정" />
     <MESSAGE value="Frontend 개발 완료" />
-    <MESSAGE value="gradle수정 및 MainController" />
-    <option name="LAST_COMMIT_MESSAGE" value="gradle수정 및 MainController" />
+    <MESSAGE value="feat:MinecraftServersScanService 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:MinecraftServersScanService 추가" />
   </component>
 </project>
