@@ -1,6 +1,7 @@
 package McJarSwap.service;
 
 import McJarSwap.Room;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +17,27 @@ import java.util.Optional;
 @Service
 public class RoomService {
 
-    //초기 데이터 임의로 설정
-    private final List<Room> rooms = new ArrayList<>(Arrays.asList(
-            new Room("12345", "방 이름 1", "Creative"),
-            new Room("12346", "방 이름 2", "Survival"),
-            new Room("12347", "방 이름 3", "Adventure")
-    ));
+//    //초기 데이터 임의로 설정
+//    private final List<Room> rooms = new ArrayList<>(Arrays.asList(
+//            new Room("12345", "방 이름 1", "Creative"),
+//            new Room("12346", "방 이름 2", "Survival"),
+//            new Room("12347", "방 이름 3", "Adventure")
+//    ));
+    private final List<Room> rooms = new ArrayList<>();
+    private final MinecraftServersScanService scanService;
+
+    @Autowired
+    public RoomService(MinecraftServersScanService scanService) {
+        this.scanService = scanService;
+        loadRoomsFromScan();
+    }
+
+    //실제 실행 중인 마인크래프트 서버 목록을 가져와 rooms 리스트를 초기화
+    private void loadRoomsFromScan() {
+        List<Room> scannedRooms = scanService.scanMinecraftServers();
+        rooms.clear();
+        rooms.addAll(scannedRooms);
+    }
 
     //rooms 조회
     public List<Room> getRooms(){

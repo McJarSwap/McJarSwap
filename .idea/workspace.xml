@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="feat:MinecraftServersScanService 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="fix:awk 적용 안되는 문제 해결">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +165,7 @@
       <workItem from="1738110454971" duration="1882000" />
       <workItem from="1738114668029" duration="1655000" />
       <workItem from="1738227041621" duration="1192000" />
-      <workItem from="1738228824607" duration="1534000" />
+      <workItem from="1738228824607" duration="3282000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -264,7 +263,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738110830649</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="fix:awk 적용 안되는 문제 해결">
+      <option name="closed" value="true" />
+      <created>1738230806065</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1738230806065</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,6 +299,7 @@
     <MESSAGE value="axios.js 의 `baseURL` 지정" />
     <MESSAGE value="Frontend 개발 완료" />
     <MESSAGE value="feat:MinecraftServersScanService 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:MinecraftServersScanService 추가" />
+    <MESSAGE value="fix:awk 적용 안되는 문제 해결" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:awk 적용 안되는 문제 해결" />
   </component>
 </project>
