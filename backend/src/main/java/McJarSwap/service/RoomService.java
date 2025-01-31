@@ -62,12 +62,12 @@ public class RoomService {
         return rooms.stream().filter(r -> r.getPort().equals(port)).findFirst();
     }
 
-    public boolean updateRoomSettings(String port, String changePort, String mode, MultipartFile jarFile) {
+    public boolean updateRoomSettings(String port, String changeport, String mode, MultipartFile jarFile) {
         Optional<Room> roomOptional = findRoomByPort(port);
 
         if (roomOptional.isPresent()) {
             Room room = roomOptional.get();
-            if (changePort != null) room.setPort(changePort);
+            if (changeport != null) room.setPort(changeport);
             if (mode != null) room.setMode(mode);
             if (jarFile != null && !jarFile.isEmpty()) {
                 saveJarFile(jarFile);
