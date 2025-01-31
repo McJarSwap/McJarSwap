@@ -78,12 +78,14 @@ public class MainController {
 
     @PostMapping("/settings/save")
     public ResponseEntity<?> saveSettings(
-            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("data") String dataJson) {
+
 
         try {
             //data는 port, changePort, mode로 구성
             RoomSettings updateData = objectMapper.readValue(dataJson, RoomSettings.class);
+
 
             if (updateData.getPort() == null || updateData.getPort().isEmpty()) {
                 return ResponseEntity.badRequest().body("포트 번호는 필수입니다.");
@@ -91,19 +93,23 @@ public class MainController {
 
             boolean updated = roomService.updateRoomSettings(
                     updateData.getPort(),
-                    updateData.getChangePort(),
+                    updateData.getChangeport(),
                     updateData.getMode(),
                     file
             );
+
 
             if (updated) {
                 return ResponseEntity.ok("설정이 성공적으로 저장되었습니다.");
             } else {
                 return ResponseEntity.badRequest().body("설정을 저장할 수 없습니다. 포트를 확인하세요.");
             }
+
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("설정 저장 중 오류 발생: " + e.getMessage());
         }
+
+
     }
 
     //@GetMapping("/delete") // localhost 에서는 GetMapping 으로해야 정상작동
