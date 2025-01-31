@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class MainController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String dataJson) {
 
+
         try {
             // JSON 문자열을 Room 객체로 변환
             Room room = objectMapper.readValue(dataJson, Room.class);
@@ -47,30 +49,30 @@ public class MainController {
                 return ResponseEntity.badRequest().body("포트가 이미 사용 중입니다: " + room.getPort());
             }
 
-            // 파일 저장 처리 (예제: 업로드 경로 지정)
+            /*
+            // 파일 저장 처리 아직 구현 안됨(주석 해제하면 오류)
             String uploadDir = "uploads/";
             file.transferTo(new java.io.File(uploadDir + file.getOriginalFilename()));
+            */
 
             // 방 추가 처리
             Room createdRoom = roomService.addRoom(room);
 
-            return ResponseEntity.ok(createdRoom);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(createdRoom));
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("방 생성 중 오류 발생: " + e.getMessage());
         }
 
-
     }
 
     @GetMapping("/checkup")
-    public ResponseEntity<?> checkPortAvailability(@RequestParam("port") String port) {
+    public Map<String, String> checkPortAvailability(@RequestParam("port") String port) {
         boolean valid = roomService.isValidPort(port);
 
-        if (valid) {
-            return ResponseEntity.ok("사용 가능한 포트입니다: " + port);
-        } else {
-            return ResponseEntity.badRequest().body("포트가 이미 사용 중입니다: " + port);
-        }
+        Map<String, String> response = new HashMap<>();
+        response.put("validate", String.valueOf(valid));
+
+        return response;
     }
 
 

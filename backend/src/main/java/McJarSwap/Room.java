@@ -1,18 +1,13 @@
 package McJarSwap;
 
+
 public class Room {
     private String port;
     private String name;
     private String mode;
-
     private String xmx;
     private String xms;
 
-    public Room(String port, String name, String mode) {
-        this.port = port;
-        this.name = name;
-        this.mode = mode;
-    }
 
     public Room(String port, String name, String mode, String xmx, String xms) {
         this.port = port;
@@ -21,6 +16,16 @@ public class Room {
         this.xmx = xmx;
         this.xms = xms;
     }
+
+    public Room(String port, String name, String mode) {
+        this(port, name, mode, "1024", "1024");
+    }
+
+    public Room() {
+        this.xmx = "1024";
+        this.xms = "1024";
+    }
+
 
     public String getPort() {
         return port;
