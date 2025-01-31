@@ -1,0 +1,38 @@
+Index: backend/src/main/java/McJarSwap/Room.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package McJarSwap;\r\n\r\npublic class Room {\r\n    private String port;\r\n    private String name;\r\n    private String mode;\r\n\r\n    private String xmx;\r\n    private String xms;\r\n\r\n    public Room(String port, String name, String mode) {\r\n        this.port = port;\r\n        this.name = name;\r\n        this.mode = mode;\r\n    }\r\n\r\n    public Room(String port, String name, String mode, String xmx, String xms) {\r\n        this.port = port;\r\n        this.name = name;\r\n        this.mode = mode;\r\n        this.xmx = xmx;\r\n        this.xms = xms;\r\n    }\r\n\r\n    public String getPort() {\r\n        return port;\r\n    }\r\n\r\n    public void setPort(String port) {\r\n        this.port = port;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public String getMode() {\r\n        return mode;\r\n    }\r\n\r\n    public void setMode(String mode) {\r\n        this.mode = mode;\r\n    }\r\n    public String getXmx() {\r\n        return xmx;\r\n    }\r\n\r\n    public void setXmx(String xmx) {\r\n        this.xmx = xmx;\r\n    }\r\n    public String getXms() {\r\n        return xms;\r\n    }\r\n\r\n    public void setXms(String xms) {\r\n        this.xms = xms;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/McJarSwap/Room.java b/backend/src/main/java/McJarSwap/Room.java
+--- a/backend/src/main/java/McJarSwap/Room.java	
++++ b/backend/src/main/java/McJarSwap/Room.java	
+@@ -1,18 +1,13 @@
+ package McJarSwap;
+ 
++
+ public class Room {
+     private String port;
+     private String name;
+     private String mode;
+-
+     private String xmx;
+     private String xms;
+ 
+-    public Room(String port, String name, String mode) {
+-        this.port = port;
+-        this.name = name;
+-        this.mode = mode;
+-    }
+ 
+     public Room(String port, String name, String mode, String xmx, String xms) {
+         this.port = port;
+@@ -22,6 +17,7 @@
+         this.xms = xms;
+     }
+ 
++
+     public String getPort() {
+         return port;
+     }
