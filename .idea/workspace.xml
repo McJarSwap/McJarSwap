@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="feat: GetMapping 부분 Controller 간소화">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="addroom, saveSettings">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Rebasing_at_2025-02-02__12_21__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Rebasing_at_2025-02-02_오전_12_21_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-01__7_38__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-01_오후_7_38_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-02__12_12__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-02__12_12__Changes_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-02_오전_12_12_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-02_오전_12_12_[Changes]1/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/uploads/server.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/uploads/server.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploads/server.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
@@ -313,7 +324,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738302893510</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="addroom, saveSettings">
+      <option name="closed" value="true" />
+      <created>1738431533789</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1738431533789</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -347,6 +366,8 @@
     <MESSAGE value="/checkup 리턴 수정" />
     <MESSAGE value="생성자 수정" />
     <MESSAGE value="feat: GetMapping 부분 Controller 간소화" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: GetMapping 부분 Controller 간소화" />
+    <MESSAGE value="Unversioned Files" />
+    <MESSAGE value="addroom, saveSettings" />
+    <option name="LAST_COMMIT_MESSAGE" value="addroom, saveSettings" />
   </component>
 </project>
