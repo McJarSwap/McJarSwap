@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="기타">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="feat: GetMapping 부분 Controller 간소화">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,8 +149,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
       </set>
     </attachedChunks>
   </component>
@@ -174,7 +175,6 @@
       <workItem from="1738114668029" duration="1655000" />
       <workItem from="1738227041621" duration="1192000" />
       <workItem from="1738228824607" duration="3282000" />
-      <workItem from="1738308059316" duration="1815000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -312,15 +312,7 @@
       <option name="project" value="LOCAL" />
       <updated>1738302893510</updated>
     </task>
-    <task id="LOCAL-00018" summary="기타">
-      <option name="closed" value="true" />
-      <created>1738303023268</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1738303023268</updated>
-    </task>
-    <option name="localTasksCounter" value="19" />
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -353,7 +345,7 @@
     <MESSAGE value="업로드 파일 사이즈 제한 수정" />
     <MESSAGE value="/checkup 리턴 수정" />
     <MESSAGE value="생성자 수정" />
-    <MESSAGE value="기타" />
-    <option name="LAST_COMMIT_MESSAGE" value="기타" />
+    <MESSAGE value="feat: GetMapping 부분 Controller 간소화" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: GetMapping 부분 Controller 간소화" />
   </component>
 </project>
