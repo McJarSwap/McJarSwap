@@ -1,0 +1,313 @@
+Index: backend/src/main/java/McJarSwap/service/RoomService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package McJarSwap.service;\r\n\r\nimport McJarSwap.Room;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.io.InputStreamReader;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\nimport java.util.Optional;\r\nimport java.util.Map;\r\nimport java.util.stream.Collectors;\r\n\r\n\r\n//Room 객체 임의로 생성해둔것임\r\n@Service\r\npublic class RoomService {\r\n\r\n    //초기 데이터 임의로 설정\r\n    /*\r\n    private final List<Room> rooms = new ArrayList<>(Arrays.asList(\r\n           new Room(\"12345\", \"방 이름 1\", \"Creative\"),\r\n           new Room(\"12346\", \"방 이름 2\", \"Survival\"),\r\n           new Room(\"12347\", \"방 이름 3\", \"Adventure\")\r\n    ));\r\n     */\r\n    private final List<Room> rooms = new ArrayList<>();\r\n    private final MinecraftServersScanService scanService;\r\n\r\n    @Autowired\r\n    public RoomService(MinecraftServersScanService scanService) {\r\n        this.scanService = scanService;\r\n       loadRoomsFromScan();\r\n    }\r\n\r\n    // Room 객체 리스트를 Map 리스트로 변환하는 새로운 메서드\r\n    public List<Map<String, String>> getRoomsAsMap() {\r\n        return rooms.stream()\r\n                .map(this::convertRoomToMap)\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    // Room 객체 -> Map 변환 메서드 (private)\r\n    private Map<String, String> convertRoomToMap(Room room) {\r\n        return Map.of(\r\n                \"port\", room.getPort(),\r\n                \"name\", room.getName(),\r\n                \"mode\", room.getMode()\r\n        );\r\n    }\r\n    //실제 실행 중인 마인크래프트 서버 목록을 가져와 rooms 리스트를 초기화\r\n    private void loadRoomsFromScan() {\r\n        List<Room> scannedRooms = scanService.scanMinecraftServers();\r\n        rooms.clear();\r\n        rooms.addAll(scannedRooms);\r\n    }\r\n\r\n    //rooms 조회\r\n    public List<Room> getRooms(){\r\n        return rooms;\r\n    }\r\n\r\n    //새로운 room 생성\r\n    public Room addRoom(Room room){\r\n        rooms.add(room);\r\n        return room;\r\n    }\r\n\r\n    //port 중복 검사\r\n    public boolean isValidPort(String port) {\r\n        return rooms.stream().noneMatch(r -> r.getPort().equals(port));\r\n    }\r\n\r\n    //port 로 room 찾기\r\n    public Optional<Room> findRoomByPort(String port) {\r\n        return rooms.stream().filter(r -> r.getPort().equals(port)).findFirst();\r\n    }\r\n\r\n    public boolean updateRoomSettings(String port, String changeport, String mode, MultipartFile jarFile) {\r\n        Optional<Room> roomOptional = findRoomByPort(port);\r\n\r\n        if (roomOptional.isPresent()) {\r\n            Room room = roomOptional.get();\r\n            if (changeport != null) room.setPort(changeport);\r\n            if (mode != null) room.setMode(mode);\r\n            if (jarFile != null && !jarFile.isEmpty()) {\r\n                saveJarFile(jarFile);\r\n            }\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n\r\n    private void saveJarFile(MultipartFile jarFile) {\r\n        String uploadDir = \"uploads/\";\r\n        File directory = new File(uploadDir);\r\n        if (!directory.exists()) {\r\n            directory.mkdirs();\r\n        }\r\n        try {\r\n            jarFile.transferTo(new File(uploadDir + jarFile.getOriginalFilename()));\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(\"파일 저장 중 오류 발생: \" + e.getMessage(), e);\r\n        }\r\n    }\r\n\r\n\r\n    // \uD83D\uDD39 실행 중인 서버가 있는지 확인하고 삭제하는 메서드\r\n    public boolean deleteRoomByPort(String port) {\r\n        Optional<Room> roomOptional = findRoomByPort(port);\r\n\r\n        if (roomOptional.isPresent()) {\r\n            Room room = roomOptional.get();\r\n\r\n            // \uD83D\uDD25 실행 중인 서버 리스트 가져오기 (scan 기능 활용)\r\n            List<Room> runningServers = scanService.scanMinecraftServers();\r\n\r\n            // \uD83D\uDD0D 실행 중인지 확인\r\n            boolean isRunning = runningServers.stream()\r\n                    .anyMatch(r -> r.getPort().equals(port));\r\n\r\n            if (!isRunning) {\r\n                System.out.println(\"\uD83D\uDEAB 실행 중인 서버가 아닙니다: \" + port);\r\n                return false;\r\n            }\r\n\r\n            try {\r\n                // 1\uFE0F⃣ 실행 중인 서버 프로세스 ID 찾기\r\n                String pid = getProcessIdByPort(port);\r\n                if (pid != null) {\r\n                    executeCommand(\"kill -9 \" + pid);\r\n                }\r\n\r\n                // 2\uFE0F⃣ 서버 폴더 삭제\r\n                String folderPath = getFolderPathByPort(port);\r\n                if (folderPath != null) {\r\n                    executeCommand(\"rm -rf \" + folderPath);\r\n                }\r\n\r\n                // 3\uFE0F⃣ Room 목록에서 삭제\r\n                rooms.remove(room);\r\n                return true;\r\n\r\n            } catch (Exception e) {\r\n                e.printStackTrace();\r\n                return false;\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n\r\n    // \uD83D\uDD39 특정 포트에서 실행 중인 프로세스 ID 찾기\r\n    private String getProcessIdByPort(String port) throws Exception {\r\n        Process process = executeCommand(\"lsof -i :\" + port + \" | grep LISTEN | awk '{print $2}'\");\r\n        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {\r\n            return reader.readLine(); // 첫 번째 줄이 PID\r\n        }\r\n    }\r\n\r\n    // \uD83D\uDD39 특정 포트의 서버 실행 경로 찾기\r\n    private String getFolderPathByPort(String port) throws Exception {\r\n        String pid = getProcessIdByPort(port);\r\n        if (pid != null) {\r\n            Process process = executeCommand(\"pwdx \" + pid);\r\n            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {\r\n                String line = reader.readLine();\r\n                if (line != null && line.contains(\": \")) {\r\n                    return line.split(\": \")[1].trim();\r\n                }\r\n            }\r\n        }\r\n        return null;\r\n    }\r\n\r\n    // \uD83D\uDD39 리눅스 명령어 실행 메서드\r\n    private Process executeCommand(String command) throws Exception {\r\n        return new ProcessBuilder(\"bash\", \"-c\", command).start();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/McJarSwap/service/RoomService.java b/backend/src/main/java/McJarSwap/service/RoomService.java
+--- a/backend/src/main/java/McJarSwap/service/RoomService.java	(revision 78f0015364999f0bc4df875279f34dff920078be)
++++ b/backend/src/main/java/McJarSwap/service/RoomService.java	(date 1738422755443)
+@@ -5,16 +5,12 @@
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.multipart.MultipartFile;
+ 
+-import java.io.BufferedReader;
+ import java.io.File;
+ import java.io.IOException;
+-import java.io.InputStreamReader;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+ import java.util.Optional;
+-import java.util.Map;
+-import java.util.stream.Collectors;
+ 
+ 
+ //Room 객체 임의로 생성해둔것임
+@@ -38,21 +34,6 @@
+        loadRoomsFromScan();
+     }
+ 
+-    // Room 객체 리스트를 Map 리스트로 변환하는 새로운 메서드
+-    public List<Map<String, String>> getRoomsAsMap() {
+-        return rooms.stream()
+-                .map(this::convertRoomToMap)
+-                .collect(Collectors.toList());
+-    }
+-
+-    // Room 객체 -> Map 변환 메서드 (private)
+-    private Map<String, String> convertRoomToMap(Room room) {
+-        return Map.of(
+-                "port", room.getPort(),
+-                "name", room.getName(),
+-                "mode", room.getMode()
+-        );
+-    }
+     //실제 실행 중인 마인크래프트 서버 목록을 가져와 rooms 리스트를 초기화
+     private void loadRoomsFromScan() {
+         List<Room> scannedRooms = scanService.scanMinecraftServers();
+@@ -110,76 +91,14 @@
+         }
+     }
+ 
+-
+-    // 🔹 실행 중인 서버가 있는지 확인하고 삭제하는 메서드
+-    public boolean deleteRoomByPort(String port) {
++    public boolean deleteByPort(String port) {
+         Optional<Room> roomOptional = findRoomByPort(port);
+ 
+         if (roomOptional.isPresent()) {
+-            Room room = roomOptional.get();
+-
+-            // 🔥 실행 중인 서버 리스트 가져오기 (scan 기능 활용)
+-            List<Room> runningServers = scanService.scanMinecraftServers();
+-
+-            // 🔍 실행 중인지 확인
+-            boolean isRunning = runningServers.stream()
+-                    .anyMatch(r -> r.getPort().equals(port));
+-
+-            if (!isRunning) {
+-                System.out.println("🚫 실행 중인 서버가 아닙니다: " + port);
+-                return false;
+-            }
+-
+-            try {
+-                // 1️⃣ 실행 중인 서버 프로세스 ID 찾기
+-                String pid = getProcessIdByPort(port);
+-                if (pid != null) {
+-                    executeCommand("kill -9 " + pid);
+-                }
+-
+-                // 2️⃣ 서버 폴더 삭제
+-                String folderPath = getFolderPathByPort(port);
+-                if (folderPath != null) {
+-                    executeCommand("rm -rf " + folderPath);
+-                }
+-
+-                // 3️⃣ Room 목록에서 삭제
+-                rooms.remove(room);
+-                return true;
+-
+-            } catch (Exception e) {
+-                e.printStackTrace();
+-                return false;
+-            }
++            rooms.remove(roomOptional.get());
++            return true;
+         }
+         return false;
+     }
+-
+-    // 🔹 특정 포트에서 실행 중인 프로세스 ID 찾기
+-    private String getProcessIdByPort(String port) throws Exception {
+-        Process process = executeCommand("lsof -i :" + port + " | grep LISTEN | awk '{print $2}'");
+-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+-            return reader.readLine(); // 첫 번째 줄이 PID
+-        }
+-    }
+ 
+-    // 🔹 특정 포트의 서버 실행 경로 찾기
+-    private String getFolderPathByPort(String port) throws Exception {
+-        String pid = getProcessIdByPort(port);
+-        if (pid != null) {
+-            Process process = executeCommand("pwdx " + pid);
+-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+-                String line = reader.readLine();
+-                if (line != null && line.contains(": ")) {
+-                    return line.split(": ")[1].trim();
+-                }
+-            }
+-        }
+-        return null;
+-    }
+-
+-    // 🔹 리눅스 명령어 실행 메서드
+-    private Process executeCommand(String command) throws Exception {
+-        return new ProcessBuilder("bash", "-c", command).start();
+-    }
+ }
+Index: backend/src/main/java/McJarSwap/MainController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package McJarSwap;\r\n\r\nimport McJarSwap.service.RoomService;\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.io.IOException;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\nimport java.util.stream.Collectors;\r\n\r\n@RestController\r\npublic class MainController {\r\n\r\n    private RoomService roomService;\r\n    private ObjectMapper objectMapper; // json을 room객체로 변환에 사용\r\n\r\n    public MainController(RoomService roomService, ObjectMapper objectMapper) {\r\n        this.roomService = roomService;\r\n        this.objectMapper = objectMapper;\r\n    }\r\n\r\n    @GetMapping(\"/\")\r\n    public List<Map<String, String>> getRooms() {\r\n        return roomService.getRoomsAsMap();\r\n    }\r\n\r\n    @PostMapping(\"/addroom\")\r\n    public ResponseEntity<?> addRoom(\r\n            @RequestParam(\"file\") MultipartFile file,\r\n            @RequestParam(\"data\") String dataJson) {\r\n\r\n\r\n        try {\r\n            // JSON 문자열을 Room 객체로 변환\r\n            Room room = objectMapper.readValue(dataJson, Room.class);\r\n\r\n            // 포트 중복 확인\r\n            if (!roomService.isValidPort(room.getPort())) {\r\n                return ResponseEntity.badRequest().body(\"포트가 이미 사용 중입니다: \" + room.getPort());\r\n            }\r\n\r\n            /*\r\n            // 파일 저장 처리 아직 구현 안됨(주석 해제하면 오류)\r\n            String uploadDir = \"uploads/\";\r\n            file.transferTo(new java.io.File(uploadDir + file.getOriginalFilename()));\r\n            */\r\n\r\n            // 방 추가 처리\r\n            Room createdRoom = roomService.addRoom(room);\r\n\r\n            return ResponseEntity.ok(objectMapper.writeValueAsString(createdRoom));\r\n        } catch (IOException e) {\r\n            return ResponseEntity.internalServerError().body(\"방 생성 중 오류 발생: \" + e.getMessage());\r\n        }\r\n\r\n    }\r\n\r\n    @GetMapping(\"/checkup\")\r\n    public Map<String, String> checkPortAvailability(@RequestParam(\"port\") String port) {\r\n        boolean valid = roomService.isValidPort(port);\r\n\r\n        Map<String, String> response = new HashMap<>();\r\n        response.put(\"validate\", String.valueOf(valid));\r\n\r\n        return response;\r\n    }\r\n\r\n\r\n    @PostMapping(\"/settings/save\")\r\n    public ResponseEntity<?> saveSettings(\r\n            @RequestParam(\"file\") MultipartFile file,\r\n            @RequestParam(\"data\") String dataJson) {\r\n\r\n        try {\r\n            //data는 port, changePort, mode로 구성\r\n            RoomSettings updateData = objectMapper.readValue(dataJson, RoomSettings.class);\r\n\r\n            if (updateData.getPort() == null || updateData.getPort().isEmpty()) {\r\n                return ResponseEntity.badRequest().body(\"포트 번호는 필수입니다.\");\r\n            }\r\n\r\n            boolean updated = roomService.updateRoomSettings(\r\n                    updateData.getPort(),\r\n                    updateData.getChangeport(),\r\n                    updateData.getMode(),\r\n                    file\r\n            );\r\n\r\n            if (updated) {\r\n                return ResponseEntity.ok(\"설정이 성공적으로 저장되었습니다.\");\r\n            } else {\r\n                return ResponseEntity.badRequest().body(\"설정을 저장할 수 없습니다. 포트를 확인하세요.\");\r\n            }\r\n        } catch (IOException e) {\r\n            return ResponseEntity.internalServerError().body(\"설정 저장 중 오류 발생: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    // @GetMapping(\"/delete\")\r\n    // localhost 에서는 GetMapping 으로 해야 정상작동\r\n    @DeleteMapping(\"/delete\")\r\n    public ResponseEntity<String> deleteRoom(@RequestParam(\"port\") String port) {\r\n        boolean deleted = roomService.deleteRoomByPort(port);\r\n        if (deleted) {\r\n            return ResponseEntity.ok(\"정상적으로 삭제되었습니다.\");\r\n        } else {\r\n            return ResponseEntity.badRequest().body(\"서버가 실행 중인지 확인하세요.\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/McJarSwap/MainController.java b/backend/src/main/java/McJarSwap/MainController.java
+--- a/backend/src/main/java/McJarSwap/MainController.java	(revision 78f0015364999f0bc4df875279f34dff920078be)
++++ b/backend/src/main/java/McJarSwap/MainController.java	(date 1738422761597)
+@@ -1,11 +1,14 @@
+ package McJarSwap;
+ 
+ import McJarSwap.service.RoomService;
++import com.fasterxml.jackson.core.JsonProcessingException;
+ import com.fasterxml.jackson.databind.ObjectMapper;
++import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
+ import org.springframework.web.multipart.MultipartFile;
+ 
++import java.io.File;
+ import java.io.IOException;
+ import java.util.HashMap;
+ import java.util.List;
+@@ -15,9 +18,10 @@
+ @RestController
+ public class MainController {
+ 
+-    private RoomService roomService;
+-    private ObjectMapper objectMapper; // json을 room객체로 변환에 사용
++    private final RoomService roomService;
++    private final ObjectMapper objectMapper; // json을 room객체로 변환에 사용
+ 
++    @Autowired
+     public MainController(RoomService roomService, ObjectMapper objectMapper) {
+         this.roomService = roomService;
+         this.objectMapper = objectMapper;
+@@ -25,7 +29,17 @@
+ 
+     @GetMapping("/")
+     public List<Map<String, String>> getRooms() {
+-        return roomService.getRoomsAsMap();
++
++        // TODO return roomService.현재실행중인서버목록을조회해서room객체를만들어반환해주는메서드();
++
++        // 날릴 내용(아래)
++        return roomService.getRooms().stream()
++                .map(room -> Map.of(
++                        "port", room.getPort(),
++                        "name", room.getName(),
++                        "mode", room.getMode()
++                ))
++                .collect(Collectors.toList());
+     }
+ 
+     @PostMapping("/addroom")
+@@ -33,30 +47,12 @@
+             @RequestParam("file") MultipartFile file,
+             @RequestParam("data") String dataJson) {
+ 
+-
+-        try {
+-            // JSON 문자열을 Room 객체로 변환
+-            Room room = objectMapper.readValue(dataJson, Room.class);
+-
+-            // 포트 중복 확인
+-            if (!roomService.isValidPort(room.getPort())) {
+-                return ResponseEntity.badRequest().body("포트가 이미 사용 중입니다: " + room.getPort());
+-            }
+-
+-            /*
+-            // 파일 저장 처리 아직 구현 안됨(주석 해제하면 오류)
+-            String uploadDir = "uploads/";
+-            file.transferTo(new java.io.File(uploadDir + file.getOriginalFilename()));
+-            */
+-
+-            // 방 추가 처리
+-            Room createdRoom = roomService.addRoom(room);
+-
+-            return ResponseEntity.ok(objectMapper.writeValueAsString(createdRoom));
+-        } catch (IOException e) {
+-            return ResponseEntity.internalServerError().body("방 생성 중 오류 발생: " + e.getMessage());
+-        }
+-
++        /*
++         * file과 dataJSON을 분석해서 Service에 존재하는 메서드로 넘기기만 하면 됌.
++         * 전제조건 : Service에 file과 dataJSON정보들을 받으면 새 서버를 실행시키는 메서드가 존재해야 함
++         */
++        // TODO roomService.파일과데이터를받으면서버를만드는메서드(file, data들....);
++        return ResponseEntity.ok("Success");
+     }
+ 
+     @GetMapping("/checkup")
+@@ -72,43 +68,43 @@
+ 
+     @PostMapping("/settings/save")
+     public ResponseEntity<?> saveSettings(
+-            @RequestParam("file") MultipartFile file,
++            @RequestParam(value = "file", required = false) MultipartFile file,
+             @RequestParam("data") String dataJson) {
+ 
++        // TODO boolean updated=roomService.파일과dataJSON을받아서변경점이뭔지찾고변경한뒤결과를반환하는메서드(file, dataJson);
++        boolean updated = true;
++        /* 날릴 내용
++        RoomSettings updateData = null;
+         try {
+-            //data는 port, changePort, mode로 구성
+-            RoomSettings updateData = objectMapper.readValue(dataJson, RoomSettings.class);
+-
+-            if (updateData.getPort() == null || updateData.getPort().isEmpty()) {
+-                return ResponseEntity.badRequest().body("포트 번호는 필수입니다.");
+-            }
+-
+-            boolean updated = roomService.updateRoomSettings(
+-                    updateData.getPort(),
+-                    updateData.getChangeport(),
+-                    updateData.getMode(),
+-                    file
+-            );
++            updateData = objectMapper.readValue(dataJson, RoomSettings.class);
++        } catch (JsonProcessingException e) {
++            return ResponseEntity.badRequest().body("설정을 저장할 수 없습니다.");
++        }
++        boolean updated = roomService.updateRoomSettings(
++                updateData.getPort(),
++                updateData.getChangeport(),
++                updateData.getMode(),
++                file
++        );
++        */
+ 
+-            if (updated) {
+-                return ResponseEntity.ok("설정이 성공적으로 저장되었습니다.");
+-            } else {
+-                return ResponseEntity.badRequest().body("설정을 저장할 수 없습니다. 포트를 확인하세요.");
+-            }
+-        } catch (IOException e) {
+-            return ResponseEntity.internalServerError().body("설정 저장 중 오류 발생: " + e.getMessage());
++        if (updated) {
++            return ResponseEntity.ok("설정이 성공적으로 저장되었습니다.");
++        } else {
++            return ResponseEntity.badRequest().body("설정을 저장할 수 없습니다. 포트를 확인하세요.");
+         }
+     }
+ 
+-    // @GetMapping("/delete")
+-    // localhost 에서는 GetMapping 으로 해야 정상작동
++    //@GetMapping("/delete") // localhost 에서는 GetMapping 으로해야 정상작동
+     @DeleteMapping("/delete")
+-    public ResponseEntity<String> deleteRoom(@RequestParam("port") String port) {
+-        boolean deleted = roomService.deleteRoomByPort(port);
++    public ResponseEntity<?> deleteRoom(@RequestParam("port") String port) {
++        boolean deleted = roomService.deleteByPort(port);
++
+         if (deleted) {
+-            return ResponseEntity.ok("정상적으로 삭제되었습니다.");
++            return ResponseEntity.ok("포트 " + port + "의 방이 삭제되었습니다.");
+         } else {
+-            return ResponseEntity.badRequest().body("서버가 실행 중인지 확인하세요.");
++            return ResponseEntity.badRequest().body("삭제할 방을 찾을 수 없습니다: " + port);
+         }
+     }
++
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"91533b27-c5c7-4afb-8111-d71c79b0520c\" name=\"Changes\" comment=\"feat: GetMapping 부분 Controller 간소화\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package-lock.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/package-lock.json\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/frontend/package.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/frontend/package.json\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/backend\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$/backend\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"McJarSwap\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n            </expand>\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"JavaScript File\" />\r\n        <option value=\"HTML File\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"RESET_MODE\" value=\"MIXED\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;ChabinHwang&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/bashdas/McJarSwap.git&quot;,\r\n    &quot;accountId&quot;: &quot;9d88217c-18ad-4426-981d-efab27ae0bef&quot;\r\n  }\r\n}</component>\r\n  <component name=\"KubernetesApiPersistence\">{}</component>\r\n  <component name=\"KubernetesApiProvider\">{\r\n  &quot;isMigrated&quot;: true\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;customColor&quot;: &quot;&quot;,\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2ryoOGoyeqd7vMDSoRKrz3zO8Sq\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,\r\n    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.C:/study/McJarSwap/backend/build.gradle.executor&quot;: &quot;Run&quot;,\r\n    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,\r\n    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,\r\n    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,\r\n    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;Spring Boot.McJarSwapApplication.executor&quot;: &quot;Run&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Chabin Hwang/Desktop/Git/McJarSwap/frontend&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,\r\n    &quot;ts.external.directory.path&quot;: &quot;C:\\\\Program Files\\\\JetBrains\\\\WebStorm 2024.3.1.1\\\\plugins\\\\javascript-plugin\\\\jsLanguageServicesImpl\\\\external&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Chabin Hwang\\Desktop\\Git\\McJarSwap\\frontend\\src\\font\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Spring Boot.McJarSwapApplication\">\r\n    <configuration name=\"C:/study/McJarSwap/backend/build.gradle\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/backend/build.gradle\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list />\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"McJarSwapApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\" nameIsGenerated=\"true\">\r\n      <module name=\"backend.McJarSwap.main\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"McJarSwap.McJarSwapApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Gradle.C:/study/McJarSwap/backend/build.gradle\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"91533b27-c5c7-4afb-8111-d71c79b0520c\" name=\"Changes\" comment=\"\" />\r\n      <created>1737540642572</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1737540642572</updated>\r\n      <workItem from=\"1737540645361\" duration=\"704000\" />\r\n      <workItem from=\"1737541361615\" duration=\"16428000\" />\r\n      <workItem from=\"1737564359642\" duration=\"54000\" />\r\n      <workItem from=\"1737564448576\" duration=\"270000\" />\r\n      <workItem from=\"1737564728020\" duration=\"16000\" />\r\n      <workItem from=\"1737625406152\" duration=\"410000\" />\r\n      <workItem from=\"1737625823522\" duration=\"148000\" />\r\n      <workItem from=\"1737628739592\" duration=\"93000\" />\r\n      <workItem from=\"1737628848921\" duration=\"57000\" />\r\n      <workItem from=\"1738110454971\" duration=\"1882000\" />\r\n      <workItem from=\"1738114668029\" duration=\"1655000\" />\r\n      <workItem from=\"1738227041621\" duration=\"1192000\" />\r\n      <workItem from=\"1738228824607\" duration=\"3282000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"init\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737540914314</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737540914314</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"README.md 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737541382555</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737541382555</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737548272154</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737548272154</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"\uD83D\uDCDDSettingsScreen.js Close 버튼 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737548633077</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737548633077</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"팝업 창 중복 확인 버튼 생성\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737550288515</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737550288515</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"Alert 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737552944562</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737552944562</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737564029629</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737564029629</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737564041242</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737564041242</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737564680242</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737564680242</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"axios.js 의 `baseURL` 지정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737625247675</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737625247675</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"Frontend 개발 완료\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1737625771336</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1737625771336</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"feat:MinecraftServersScanService 추가\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738110830649</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738110830649</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"fix:awk 적용 안되는 문제 해결\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738230806065</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738230806065</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"COR 연결\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738302653296</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738302653296</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"업로드 파일 사이즈 제한 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738302729515</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738302729515</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"/checkup 리턴 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738302803617</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738302803617</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00017\" summary=\"생성자 수정\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1738302893510</created>\r\n      <option name=\"number\" value=\"00017\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00017\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1738302893510</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"18\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"init\" />\r\n    <MESSAGE value=\"README.md 수정\" />\r\n    <MESSAGE value=\"AddRoom 팝업 js css 추가&#10;SettingsScreenStyles.css 수정\" />\r\n    <MESSAGE value=\"SettingsScreen.js Close 버튼 수정\" />\r\n    <MESSAGE value=\"팝업 창 중복 확인 버튼 생성\" />\r\n    <MESSAGE value=\"Alert 수정\" />\r\n    <MESSAGE value=\"홈 화면에 HTTP GET 요청 적용 완료. 5초의 로딩 화면(정보를 다 가져오면 로딩 종료)\" />\r\n    <MESSAGE value=\"axios.js 의 `baseURL` 지정\" />\r\n    <MESSAGE value=\"Frontend 개발 완료\" />\r\n    <MESSAGE value=\"feat:MinecraftServersScanService 추가\" />\r\n    <MESSAGE value=\"fix:awk 적용 안되는 문제 해결\" />\r\n    <MESSAGE value=\"COR 연결\" />\r\n    <MESSAGE value=\"업로드 파일 사이즈 제한 수정\" />\r\n    <MESSAGE value=\"/checkup 리턴 수정\" />\r\n    <MESSAGE value=\"생성자 수정\" />\r\n    <MESSAGE value=\"feat: GetMapping 부분 Controller 간소화\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"feat: GetMapping 부분 Controller 간소화\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 78f0015364999f0bc4df875279f34dff920078be)
++++ b/.idea/workspace.xml	(date 1738422968256)
+@@ -8,8 +8,6 @@
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />

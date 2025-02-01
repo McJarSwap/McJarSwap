@@ -1,0 +1,133 @@
+Index: backend/src/main/java/McJarSwap/service/RoomService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package McJarSwap.service;\r\n\r\nimport McJarSwap.Room;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\n\r\n//Room 객체 임의로 생성해둔것임\r\n@Service\r\npublic class RoomService {\r\n\r\n    //초기 데이터 임의로 설정\r\n    /*\r\n    private final List<Room> rooms = new ArrayList<>(Arrays.asList(\r\n           new Room(\"12345\", \"방 이름 1\", \"Creative\"),\r\n           new Room(\"12346\", \"방 이름 2\", \"Survival\"),\r\n           new Room(\"12347\", \"방 이름 3\", \"Adventure\")\r\n    ));\r\n     */\r\n    private final List<Room> rooms = new ArrayList<>();\r\n    private final MinecraftServersScanService scanService;\r\n\r\n    @Autowired\r\n    public RoomService(MinecraftServersScanService scanService) {\r\n        this.scanService = scanService;\r\n       loadRoomsFromScan();\r\n    }\r\n\r\n    //실제 실행 중인 마인크래프트 서버 목록을 가져와 rooms 리스트를 초기화\r\n    private void loadRoomsFromScan() {\r\n        List<Room> scannedRooms = scanService.scanMinecraftServers();\r\n        rooms.clear();\r\n        rooms.addAll(scannedRooms);\r\n    }\r\n\r\n    //rooms 조회\r\n    public List<Room> getRooms(){\r\n        return rooms;\r\n    }\r\n\r\n    //새로운 room 생성\r\n    public Room addRoom(Room room){\r\n        rooms.add(room);\r\n        return room;\r\n    }\r\n\r\n    //port 중복 검사\r\n    public boolean isValidPort(String port) {\r\n        return rooms.stream().noneMatch(r -> r.getPort().equals(port));\r\n    }\r\n\r\n    //port 로 room 찾기\r\n    public Optional<Room> findRoomByPort(String port) {\r\n        return rooms.stream().filter(r -> r.getPort().equals(port)).findFirst();\r\n    }\r\n\r\n    public boolean updateRoomSettings(String port, String changeport, String mode, MultipartFile jarFile) {\r\n        Optional<Room> roomOptional = findRoomByPort(port);\r\n\r\n        if (roomOptional.isPresent()) {\r\n            Room room = roomOptional.get();\r\n            if (changeport != null) room.setPort(changeport);\r\n            if (mode != null) room.setMode(mode);\r\n            if (jarFile != null && !jarFile.isEmpty()) {\r\n                saveJarFile(jarFile);\r\n            }\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n\r\n    private void saveJarFile(MultipartFile jarFile) {\r\n        String uploadDir = \"uploads/\";\r\n        File directory = new File(uploadDir);\r\n        if (!directory.exists()) {\r\n            directory.mkdirs();\r\n        }\r\n        try {\r\n            jarFile.transferTo(new File(uploadDir + jarFile.getOriginalFilename()));\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(\"파일 저장 중 오류 발생: \" + e.getMessage(), e);\r\n        }\r\n    }\r\n\r\n    public boolean deleteByPort(String port) {\r\n        Optional<Room> roomOptional = findRoomByPort(port);\r\n\r\n        if (roomOptional.isPresent()) {\r\n            rooms.remove(roomOptional.get());\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/McJarSwap/service/RoomService.java b/backend/src/main/java/McJarSwap/service/RoomService.java
+--- a/backend/src/main/java/McJarSwap/service/RoomService.java	
++++ b/backend/src/main/java/McJarSwap/service/RoomService.java	
+@@ -1,12 +1,14 @@
+ package McJarSwap.service;
+ 
+ import McJarSwap.Room;
++import com.fasterxml.jackson.databind.ObjectMapper;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.multipart.MultipartFile;
+ 
+ import java.io.File;
+ import java.io.IOException;
++import java.nio.file.Paths;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+@@ -31,7 +33,7 @@
+     @Autowired
+     public RoomService(MinecraftServersScanService scanService) {
+         this.scanService = scanService;
+-       loadRoomsFromScan();
++        loadRoomsFromScan();
+     }
+ 
+     //실제 실행 중인 마인크래프트 서버 목록을 가져와 rooms 리스트를 초기화
+@@ -62,7 +64,26 @@
+         return rooms.stream().filter(r -> r.getPort().equals(port)).findFirst();
+     }
+ 
+-    public boolean updateRoomSettings(String port, String changeport, String mode, MultipartFile jarFile) {
++    public void makeServer(MultipartFile file, String dataJson) {
++        try {
++            // 1. 파일 저장
++            String filePath = saveJarFile(file);
++
++            // 2. JSON 파싱 → Room 객체 생성
++            ObjectMapper objectMapper = new ObjectMapper();
++            Room room = objectMapper.readValue(dataJson, Room.class);
++
++            Room newRoom = addRoom(room);
++
++            // 3. Room 객체를 기반으로 서버 실행 (이 부분은 네가 원하는 방식으로 구현)
++            //startServer(room, filePath);
++
++        } catch (IOException e) {
++            throw new RuntimeException("서버 생성 중 오류 발생", e);
++        }
++    }
++
++    public boolean updateRoomSettings(String port, String changeport, String mode, MultipartFile jarFile) throws IOException {
+         Optional<Room> roomOptional = findRoomByPort(port);
+ 
+         if (roomOptional.isPresent()) {
+@@ -70,7 +91,7 @@
+             if (changeport != null) room.setPort(changeport);
+             if (mode != null) room.setMode(mode);
+             if (jarFile != null && !jarFile.isEmpty()) {
+-                saveJarFile(jarFile);
++                String path = saveJarFile(jarFile);
+             }
+             return true;
+         }
+@@ -78,17 +99,20 @@
+     }
+ 
+ 
+-    private void saveJarFile(MultipartFile jarFile) {
+-        String uploadDir = "uploads/";
++    private String saveJarFile(MultipartFile jarFile) throws IOException {
++        String uploadDir =  Paths.get("src", "main", "uploads").toAbsolutePath().toString();
++
++
+         File directory = new File(uploadDir);
+         if (!directory.exists()) {
+             directory.mkdirs();
+         }
+-        try {
+-            jarFile.transferTo(new File(uploadDir + jarFile.getOriginalFilename()));
+-        } catch (IOException e) {
+-            throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage(), e);
+-        }
++
++        String filePath = uploadDir + File.separator + jarFile.getOriginalFilename();
++        File dest = new File(filePath);
++        jarFile.transferTo(dest);
++
++        return filePath; //파일의 절대경로 반환
+     }
+ 
+     public boolean deleteByPort(String port) {
+Index: backend/src/main/java/McJarSwap/MainController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package McJarSwap;\r\n\r\nimport McJarSwap.service.RoomService;\r\nimport com.fasterxml.jackson.core.JsonProcessingException;\r\nimport com.fasterxml.jackson.databind.ObjectMapper;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\nimport java.util.stream.Collectors;\r\n\r\n@RestController\r\npublic class MainController {\r\n\r\n    private final RoomService roomService;\r\n    private final ObjectMapper objectMapper; // json을 room객체로 변환에 사용\r\n\r\n    @Autowired\r\n    public MainController(RoomService roomService, ObjectMapper objectMapper) {\r\n        this.roomService = roomService;\r\n        this.objectMapper = objectMapper;\r\n    }\r\n\r\n    @GetMapping(\"/\")\r\n    public List<Map<String, String>> getRooms() {\r\n\r\n        // TODO return roomService.현재실행중인서버목록을조회해서room객체를만들어반환해주는메서드();\r\n\r\n        // 날릴 내용(아래)\r\n        return roomService.getRooms().stream()\r\n                .map(room -> Map.of(\r\n                        \"port\", room.getPort(),\r\n                        \"name\", room.getName(),\r\n                        \"mode\", room.getMode()\r\n                ))\r\n                .collect(Collectors.toList());\r\n    }\r\n\r\n    @PostMapping(\"/addroom\")\r\n    public ResponseEntity<?> addRoom(\r\n            @RequestParam(\"file\") MultipartFile file,\r\n            @RequestParam(\"data\") String dataJson) {\r\n\r\n        /*\r\n         * file과 dataJSON을 분석해서 Service에 존재하는 메서드로 넘기기만 하면 됌.\r\n         * 전제조건 : Service에 file과 dataJSON정보들을 받으면 새 서버를 실행시키는 메서드가 존재해야 함\r\n         */\r\n        // TODO roomService.파일과데이터를받으면서버를만드는메서드(file, data들....);\r\n        return ResponseEntity.ok(\"Success\");\r\n    }\r\n\r\n    @GetMapping(\"/checkup\")\r\n    public Map<String, String> checkPortAvailability(@RequestParam(\"port\") String port) {\r\n        boolean valid = roomService.isValidPort(port);\r\n\r\n        Map<String, String> response = new HashMap<>();\r\n        response.put(\"validate\", String.valueOf(valid));\r\n\r\n        return response;\r\n    }\r\n\r\n\r\n    @PostMapping(\"/settings/save\")\r\n    public ResponseEntity<?> saveSettings(\r\n            @RequestParam(value = \"file\", required = false) MultipartFile file,\r\n            @RequestParam(\"data\") String dataJson) {\r\n\r\n        // TODO boolean updated=roomService.파일과dataJSON을받아서변경점이뭔지찾고변경한뒤결과를반환하는메서드(file, dataJson);\r\n        boolean updated = true;\r\n        /* 날릴 내용\r\n        RoomSettings updateData = null;\r\n        try {\r\n            updateData = objectMapper.readValue(dataJson, RoomSettings.class);\r\n        } catch (JsonProcessingException e) {\r\n            return ResponseEntity.badRequest().body(\"설정을 저장할 수 없습니다.\");\r\n        }\r\n        boolean updated = roomService.updateRoomSettings(\r\n                updateData.getPort(),\r\n                updateData.getChangeport(),\r\n                updateData.getMode(),\r\n                file\r\n        );\r\n        */\r\n\r\n        if (updated) {\r\n            return ResponseEntity.ok(\"설정이 성공적으로 저장되었습니다.\");\r\n        } else {\r\n            return ResponseEntity.badRequest().body(\"설정을 저장할 수 없습니다. 포트를 확인하세요.\");\r\n        }\r\n    }\r\n\r\n    //@GetMapping(\"/delete\") // localhost 에서는 GetMapping 으로해야 정상작동\r\n    @DeleteMapping(\"/delete\")\r\n    public ResponseEntity<?> deleteRoom(@RequestParam(\"port\") String port) {\r\n        boolean deleted = roomService.deleteByPort(port);\r\n\r\n        if (deleted) {\r\n            return ResponseEntity.ok(\"포트 \" + port + \"의 방이 삭제되었습니다.\");\r\n        } else {\r\n            return ResponseEntity.badRequest().body(\"삭제할 방을 찾을 수 없습니다: \" + port);\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/McJarSwap/MainController.java b/backend/src/main/java/McJarSwap/MainController.java
+--- a/backend/src/main/java/McJarSwap/MainController.java	
++++ b/backend/src/main/java/McJarSwap/MainController.java	
+@@ -19,12 +19,10 @@
+ public class MainController {
+ 
+     private final RoomService roomService;
+-    private final ObjectMapper objectMapper; // json을 room객체로 변환에 사용
+ 
+     @Autowired
+     public MainController(RoomService roomService, ObjectMapper objectMapper) {
+         this.roomService = roomService;
+-        this.objectMapper = objectMapper;
+     }
+ 
+     @GetMapping("/")
+@@ -52,6 +50,10 @@
+          * 전제조건 : Service에 file과 dataJSON정보들을 받으면 새 서버를 실행시키는 메서드가 존재해야 함
+          */
+         // TODO roomService.파일과데이터를받으면서버를만드는메서드(file, data들....);
++
++        roomService.makeServer(file,dataJson);
++
++
+         return ResponseEntity.ok("Success");
+     }
+ 
