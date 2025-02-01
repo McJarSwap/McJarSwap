@@ -33,31 +33,15 @@ public class MainController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String dataJson) {
 
+        boolean added = roomService.makeServer(file, dataJson);
 
-        try {
-            // JSON 문자열을 Room 객체로 변환
-            Room room = objectMapper.readValue(dataJson, Room.class);
-
-            // 포트 중복 확인
-            if (!roomService.isValidPort(room.getPort())) {
-                return ResponseEntity.badRequest().body("포트가 이미 사용 중입니다: " + room.getPort());
-            }
-
-            /*
-            // 파일 저장 처리 아직 구현 안됨(주석 해제하면 오류)
-            String uploadDir = "uploads/";
-            file.transferTo(new java.io.File(uploadDir + file.getOriginalFilename()));
-            */
-
-            // 방 추가 처리
-            Room createdRoom = roomService.addRoom(room);
-
-            return ResponseEntity.ok(objectMapper.writeValueAsString(createdRoom));
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("방 생성 중 오류 발생: " + e.getMessage());
+        if (added) {
+            return ResponseEntity.ok("Success");
+        } else {
+            return ResponseEntity.badRequest().body("Error");
         }
-
     }
+
 
     @GetMapping("/checkup")
     public Map<String, String> checkPortAvailability(@RequestParam("port") String port) {
@@ -71,32 +55,16 @@ public class MainController {
 
 
     @PostMapping("/settings/save")
-    public ResponseEntity<?> saveSettings(
+    public ResponseEntity<String> saveSettings(
             @RequestParam("file") MultipartFile file,
             @RequestParam("data") String dataJson) {
 
-        try {
-            //data는 port, changePort, mode로 구성
-            RoomSettings updateData = objectMapper.readValue(dataJson, RoomSettings.class);
+        boolean saved = roomService.editSettings(file, dataJson);
 
-            if (updateData.getPort() == null || updateData.getPort().isEmpty()) {
-                return ResponseEntity.badRequest().body("포트 번호는 필수입니다.");
-            }
-
-            boolean updated = roomService.updateRoomSettings(
-                    updateData.getPort(),
-                    updateData.getChangeport(),
-                    updateData.getMode(),
-                    file
-            );
-
-            if (updated) {
-                return ResponseEntity.ok("설정이 성공적으로 저장되었습니다.");
-            } else {
-                return ResponseEntity.badRequest().body("설정을 저장할 수 없습니다. 포트를 확인하세요.");
-            }
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("설정 저장 중 오류 발생: " + e.getMessage());
+        if (saved) {
+            return ResponseEntity.ok("정상적으로 수정되었습니다.");
+        } else {
+            return ResponseEntity.badRequest().body("수정 중 오류 발생.");
         }
     }
 
