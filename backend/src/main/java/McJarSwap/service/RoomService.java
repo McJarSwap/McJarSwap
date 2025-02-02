@@ -287,17 +287,7 @@ public class RoomService {
 
     // 특정 포트의 서버 실행 경로 찾기
     private String getFolderPathByPort(String port) throws Exception {
-        String pid = getProcessIdByPort(port);
-        if (pid != null) {
-            Process process = executeCommand("pwdx " + pid);
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line = reader.readLine();
-                if (line != null && line.contains(": ")) {
-                    return line.split(": ")[1].trim();
-                }
-            }
-        }
-        return null;
+        return scanService.getFolderPath(getProcessIdByPort(port));
     }
 
     // 리눅스 명령어 실행 메서드
