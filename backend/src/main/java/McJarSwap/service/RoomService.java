@@ -102,13 +102,20 @@ public class RoomService {
 
 
             // 서버 실행 명령어 작성
-            String command = "cd " + serverDir + " && java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
+            String command = "cd " + serverDir + " && java -Xmx " + room.getXmx() + " M -Xms " + room.getXms() + " M -jar server.jar nogui";
 
             // 프로세스 실행
             executeCommand(command);
 
+            // TODO 1초 시간 두기
+
             //eula.txt 수정
             boolean eulaEdited = editEula(port);
+
+            // TODO server.properties 수정
+
+            // TODO 다시 서버 실행
+
 
             // 서버 리스트에 추가
             rooms.add(room);
