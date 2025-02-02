@@ -56,7 +56,7 @@ public class MainController {
 
     @PostMapping("/settings/save")
     public ResponseEntity<String> saveSettings(
-            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("data") String dataJson) {
 
         boolean saved = roomService.editSettings(file, dataJson);
