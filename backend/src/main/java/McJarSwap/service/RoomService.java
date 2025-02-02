@@ -102,13 +102,20 @@ public class RoomService {
 
 
             // 서버 실행 명령어 작성
-            String command = "cd " + serverDir + " && java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
+            String command = "cd " + serverDir + " && java -Xmx " + room.getXmx() + " M -Xms " + room.getXms() + " M -jar server.jar nogui";
 
             // 프로세스 실행
             executeCommand(command);
 
+            // TODO 1초 시간 두기
+
             //eula.txt 수정
             boolean eulaEdited = editEula(port);
+
+            // TODO server.properties 수정
+
+            // TODO 다시 서버 실행
+
 
             // 서버 리스트에 추가
             rooms.add(room);
@@ -280,17 +287,7 @@ public class RoomService {
 
     // 특정 포트의 서버 실행 경로 찾기
     private String getFolderPathByPort(String port) throws Exception {
-        String pid = getProcessIdByPort(port);
-        if (pid != null) {
-            Process process = executeCommand("pwdx " + pid);
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line = reader.readLine();
-                if (line != null && line.contains(": ")) {
-                    return line.split(": ")[1].trim();
-                }
-            }
-        }
-        return null;
+        return scanService.getFolderPath(getProcessIdByPort(port));
     }
 
     // 리눅스 명령어 실행 메서드
