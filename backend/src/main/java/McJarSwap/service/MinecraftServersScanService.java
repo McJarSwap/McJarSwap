@@ -65,7 +65,7 @@ public class MinecraftServersScanService {
         return pids;
     }
 
-    private String getFolderPath(String pid) throws Exception {
+    public String getFolderPath(String pid) throws Exception {
         String command = "pwdx " + pid;
 
         ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
