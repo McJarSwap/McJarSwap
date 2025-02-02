@@ -221,10 +221,8 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
                         />
                     </label>
                     <div className="form-actions">
+                        <button type="button" onClick={onClose}>Cancel</button>
                         <button type="submit">Create Room</button>
-                        <button type="button" onClick={onClose}>
-                            Cancel
-                        </button>
                     </div>
                 </form>
             </div>
