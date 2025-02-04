@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="addroom, saveSettings">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="file null도 정상응답 되도록">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/MinecraftServersScanService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,8 +150,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -177,6 +176,9 @@
       <workItem from="1738114668029" duration="1655000" />
       <workItem from="1738227041621" duration="1192000" />
       <workItem from="1738228824607" duration="3282000" />
+      <workItem from="1738494072596" duration="70000" />
+      <workItem from="1738494159414" duration="1315000" />
+      <workItem from="1738660847783" duration="17693000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -322,7 +324,23 @@
       <option name="project" value="LOCAL" />
       <updated>1738431533789</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="addroom, saveSettings">
+      <option name="closed" value="true" />
+      <created>1738431770964</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1738431770964</updated>
+    </task>
+    <task id="LOCAL-00020" summary="addroom, saveSettings">
+      <option name="closed" value="true" />
+      <created>1738431787133</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1738431787133</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

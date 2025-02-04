@@ -33,10 +33,11 @@ public class RoomService {
     //이 뒤에 port를 붙여서 경로 사용. ex) port=12345면 kkang5430\\minecraft_server12345
     private final String rootDir = "\\\\wsl.localhost\\Ubuntu\\home\\kkang5430\\minecraft_server";
 
+
     @Autowired
     public RoomService(MinecraftServersScanService scanService) {
         this.scanService = scanService;
-       loadRoomsFromScan();
+        loadRoomsFromScan();
     }
 
     // Room 객체 리스트를 Map 리스트로 변환하는 새로운 메서드
@@ -101,21 +102,29 @@ public class RoomService {
             file.transferTo(jarFile);
 
 
+            File targetDir = new File(rootDir + port);
+
             // 서버 실행 명령어 작성
-            String command = "cd " + serverDir + " && java -Xmx " + room.getXmx() + " M -Xms " + room.getXms() + " M -jar server.jar nogui";
+            String command = "java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
 
             // 프로세스 실행
-            executeCommand(command);
+            executeCommandByDir(command, targetDir);
 
-            // TODO 1초 시간 두기
+            // 8초 시간 두기
+
+            Thread.sleep(8000);
 
             //eula.txt 수정
             boolean eulaEdited = editEula(port);
 
-            // TODO server.properties 수정
+            //server.properties 수정
+            File propertiesFile = new File(rootDir + port + "/server.properties");
+            if (propertiesFile.exists()) {
+                editProperties(propertiesFile, room);
+            }
 
-            // TODO 다시 서버 실행
-
+            // 다시 서버 실행
+            executeCommandByDir(command, targetDir);
 
             // 서버 리스트에 추가
             rooms.add(room);
@@ -167,14 +176,66 @@ public class RoomService {
         }
     }
 
+    public void editProperties(File propertiesFile, Room room) {
+
+        System.out.println("mode :" + room.getMode());
+
+        try {
+            List<String> lines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("level-name=")) {
+                        lines.add("level-name=" + room.getName());
+                    } else if (line.startsWith("server-port=")) {
+                        lines.add("server-port=" + room.getPort());
+                    } else if (line.startsWith("gamemode=")) {
+                        lines.add("gamemode=" + room.getMode());
+                    } else {
+                        lines.add(line);
+                    }
+                }
+            }
+
+            // 파일 다시 쓰기
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(propertiesFile))) {
+                for (String updatedLine : lines) {
+                    writer.write(updatedLine);
+                    writer.newLine();
+                }
+            }
+
+            System.out.println("server.properties 수정 완료");
+
+            //수정 내용 확인
+            try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
+                System.out.println("🔍 수정된 server.properties 내용:");
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+
+
+        } catch (IOException e) {
+            System.err.println("server.properties 수정 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public boolean editSettings(MultipartFile file, String dataJson) {
         try {
+            System.out.println("여기까지 오케이");
+            System.out.println("dataJson: " + dataJson);
+
             // JSON 데이터를 RoomSettings 객체로 변환
             RoomSettings settings = new ObjectMapper().readValue(dataJson, RoomSettings.class);
+            System.out.println("여기까지 오케이");
             String port = settings.getPort(); // 현재 서버의 포트
             String changeport = settings.getChangeport(); // 새로운 포트
             String mode = settings.getMode(); // 변경할 모드
 
+            System.out.println("여기까지 오케이");
             // 서버 디렉토리 경로를 나타내는 객체 생성
             String serverDir = rootDir + port;
             File serverFolder = new File(serverDir);
@@ -183,6 +244,7 @@ public class RoomService {
                 return false;
             }
 
+            System.out.println("여기까지 오케이");
             // Room 객체 찾기
             Optional<Room> roomOptional = findRoomByPort(port);
             if (roomOptional.isEmpty()) {
@@ -192,6 +254,8 @@ public class RoomService {
 
             Room room = roomOptional.get();
 
+            //Todo 1,2,3 각각 server.properties 수정
+            System.out.println("여기까지 오케이");
             // 1. 포트 변경
             if (changeport != null && !changeport.isEmpty()) {
                 String newServerDir = rootDir + changeport;
@@ -293,5 +357,28 @@ public class RoomService {
     // 리눅스 명령어 실행 메서드
     private Process executeCommand(String command) throws Exception {
         return new ProcessBuilder("bash", "-c", command).start();
+    }
+
+    // 실행하려는 위치도 받아서 리눅스 명령어 실행
+    private void executeCommandByDir(String command, File directory) throws Exception {
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
+        processBuilder.directory(directory); // 실행할 디렉토리 지정
+        processBuilder.redirectErrorStream(true);
+
+        Process process = processBuilder.start();
+
+        // 실행된 명령어 출력
+        System.out.println("실행 중: " + command + " (디렉토리: " + directory.getAbsolutePath() + ")");
+
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
