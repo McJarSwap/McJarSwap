@@ -6,6 +6,11 @@ public class RoomSettings {
     private String changeport;
     private String mode;
 
+    //역직렬화를 위한 기본 생성자
+    public RoomSettings() {
+
+    }
+
 
     public RoomSettings(String port, String changeport, String mode) {
         this.port = port;

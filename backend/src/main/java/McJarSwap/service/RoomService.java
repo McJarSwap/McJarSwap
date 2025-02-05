@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -101,17 +103,13 @@ public class RoomService {
             File jarFile = new File(serverDir + "/server.jar");
             file.transferTo(jarFile);
 
-
+            // 명령어 실행 위치
             File targetDir = new File(rootDir + port);
 
-            // 서버 실행 명령어 작성
-            String command = "java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
-
-            // 프로세스 실행
-            executeCommandByDir(command, targetDir);
+            // 서버 실행 (eula.txt, server.properties 생성)
+            startServer(room, targetDir);
 
             // 8초 시간 두기
-
             Thread.sleep(8000);
 
             //eula.txt 수정
@@ -124,7 +122,7 @@ public class RoomService {
             }
 
             // 다시 서버 실행
-            executeCommandByDir(command, targetDir);
+            startServer(room, targetDir);
 
             // 서버 리스트에 추가
             rooms.add(room);
@@ -135,7 +133,7 @@ public class RoomService {
         }
     }
 
-
+    //eula.txt 의 false 를 true 로 수정
     public boolean editEula(String port) {
         String serverDir = rootDir + port;
         File eulaFile = new File(serverDir + "/eula.txt");
@@ -176,6 +174,7 @@ public class RoomService {
         }
     }
 
+    //server.properties 파일 room 의 name, port, mode 로 수정
     public void editProperties(File propertiesFile, Room room) {
 
         System.out.println("mode :" + room.getMode());
@@ -208,13 +207,14 @@ public class RoomService {
             System.out.println("server.properties 수정 완료");
 
             //수정 내용 확인
-            try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
+
+           /* try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
                 System.out.println("🔍 수정된 server.properties 내용:");
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                 }
-            }
+            }*/
 
 
         } catch (IOException e) {
@@ -223,28 +223,27 @@ public class RoomService {
         }
     }
 
+    // 서버의 port, mode, jar 파일 수정
     public boolean editSettings(MultipartFile file, String dataJson) {
         try {
-            System.out.println("여기까지 오케이");
             System.out.println("dataJson: " + dataJson);
 
             // JSON 데이터를 RoomSettings 객체로 변환
             RoomSettings settings = new ObjectMapper().readValue(dataJson, RoomSettings.class);
-            System.out.println("여기까지 오케이");
+
             String port = settings.getPort(); // 현재 서버의 포트
             String changeport = settings.getChangeport(); // 새로운 포트
-            String mode = settings.getMode(); // 변경할 모드
+            String mode = settings.getMode(); // 새로운 모드
 
-            System.out.println("여기까지 오케이");
-            // 서버 디렉토리 경로를 나타내는 객체 생성
+            System.out.println("port: " + port + " changeport: " + changeport + " mode: " + mode);
+
             String serverDir = rootDir + port;
-            File serverFolder = new File(serverDir);
+            File serverFolder = new File(serverDir); // 서버 디렉토리 경로를 나타내는 객체 생성 - startServer 에 사용
             if (!serverFolder.exists()) {
                 System.err.println("서버 폴더가 존재하지 않습니다: " + serverDir);
                 return false;
             }
 
-            System.out.println("여기까지 오케이");
             // Room 객체 찾기
             Optional<Room> roomOptional = findRoomByPort(port);
             if (roomOptional.isEmpty()) {
@@ -254,30 +253,65 @@ public class RoomService {
 
             Room room = roomOptional.get();
 
-            //Todo 1,2,3 각각 server.properties 수정
-            System.out.println("여기까지 오케이");
+            String pid = getPidByPort(room.getPort());
+            //System.out.println("Pid : " + pid);
+
             // 1. 포트 변경
-            if (changeport != null && !changeport.isEmpty()) {
-                String newServerDir = rootDir + changeport;
+            if (changeport != null) {
+
+                System.out.println("왜이러는거야?00" + changeport); //Todo <jar 교체할 때 이쪽으로 들어옴>
+
+
+                String newServerDir = rootDir + changeport; //changeport 로 인해 이름이 변경된 디렉토리 주소
                 File newServerFolder = new File(newServerDir);
 
-                //디렉토리 이름 변경
-                if (serverFolder.renameTo(newServerFolder)) {
-                    room.setPort(changeport); // Room 객체의 포트 업데이트
-                    return true;
-                } else {
+                //서버 중단
+                if (pid != null) stopServer(pid);
+
+                //새로운 포트로 디렉토리 이름바꾸기
+                if (!moveDirectoryWithCommand(serverFolder, newServerFolder)) {
+                    System.err.println("mv 명령어 실패");
                     return false;
                 }
-            }
 
-            // 2. 모드 변경 (mode가 존재할 경우)
-            if (mode != null && !mode.isEmpty()) {
-                room.setMode(mode);
+                room.setPort(changeport);
+
+                //server.properties 수정을 위한 객체
+                File propertiesFile = new File(rootDir + room.getPort() + "/server.properties");
+
+                //server.properties 에서 port 바꾸기
+                editProperties(propertiesFile, room);
+
+                startServer(room, newServerFolder);
+
                 return true;
             }
 
-            // 3. JAR 파일 교체 (file이 존재할 경우) 현재, 모든 jar파일의 이름 server.jar라고 가정
+            // 2. 모드 변경
+            if (mode != null) {
+
+                //서버 중단
+                if (pid != null) stopServer(pid);
+
+                room.setMode(mode);
+
+                //server.properties 수정을 위한 객체
+                File propertiesFile = new File(rootDir + room.getPort() + "/server.properties");
+
+                //server.properties 에서 mode 바꾸기
+                editProperties(propertiesFile, room);
+
+                startServer(room, serverFolder);
+
+                return true;
+            }
+
+            // 3. JAR 파일 교체 (file 이 존재할 경우) 현재 모든 jar 파일의 이름 server.jar 라고 가정
             if (file != null && !file.isEmpty()) {
+
+                //서버 중단
+                if (pid != null) stopServer(pid);
+
                 File oldJarFile = new File(serverFolder, "server.jar");
                 if (oldJarFile.exists()) {
                     oldJarFile.delete(); // 기존 server.jar 삭제
@@ -285,16 +319,62 @@ public class RoomService {
 
                 File newJarFile = new File(serverFolder, "server.jar");
                 file.transferTo(newJarFile);
+
+                startServer(room, serverFolder);
+
                 return true;
             }
 
-            //아무것도 수정되지 않은 경우
+            //아무것도 수정되지 않은 경우 올바른 Json 이 아님
             return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    //서버 중지
+    public void stopServer(String pid) throws Exception {
+        String command = "kill -9 " + pid;
+        executeCommand(command);
+    }
+
+    //서버 시작
+    public void startServer(Room room, File Directory) throws Exception {
+        String command = "java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
+        executeCommandByDir(command, Directory);
+    }
+
+    //changeport 로 변경된 이름의 dir 만들고 기존 dir 의 파일 옮기는 메서드
+    private boolean moveDirectoryWithCommand(File source, File target) {
+        try {
+            String sourcePath = convertToWslPath(source.getAbsolutePath());
+            String targetPath = convertToWslPath(target.getAbsolutePath());
+
+            String command = "mv " + sourcePath + " " + targetPath;
+            //System.out.println(command);
+
+            Process process = new ProcessBuilder("bash", "-c", command).start();
+            int exitCode = process.waitFor();
+
+            if (exitCode == 0) {
+                return true;
+            } else {
+                System.err.println("mv 명령어 실패 (exit code: " + exitCode + ")");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("mv 실행 중 오류 발생: " + e.getMessage());
+            return false;
+        }
+    }
+
+    //wsl 에서 인식되는 경로로 변환
+    private String convertToWslPath(String windowsPath) {
+        return windowsPath.replace("\\", "/").replace("//wsl.localhost/Ubuntu", "");
+    }
+
+
 
 
     // 실행 중인 서버가 있는지 확인하고 삭제하는 메서드
@@ -339,6 +419,16 @@ public class RoomService {
             }
         }
         return false;
+    }
+
+    //port 로 pid 만 가져오기 (getProcessIdByPort()는 한줄 그대로 반환)
+    private String getPidByPort(String port) throws Exception {
+        Process process = executeCommand("lsof -i :" + port + " | grep LISTEN | tr -s ' ' | cut -d' ' -f2");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String pid = reader.readLine();
+            return (pid != null && !pid.isEmpty()) ? pid : null;
+        }
     }
 
     // 특정 포트에서 실행 중인 프로세스 ID 찾기
