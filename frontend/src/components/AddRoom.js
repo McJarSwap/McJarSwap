@@ -175,7 +175,7 @@ const AddRoom = ({ onClose, onCreateRoom }) => {
                     </button>
                     <div className="game-mode-buttons">
                         <h3>Select Game Mode</h3>
-                        {['Survival', 'Creative', 'Adventure'].map((mode) => (
+                        {['survival', 'creative', 'adventure'].map((mode) => (
                             <button
                                 type="button"
                                 key={mode}

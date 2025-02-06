@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="jar 파일 교체 기능 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +178,9 @@
       <workItem from="1738494159414" duration="1315000" />
       <workItem from="1738660847783" duration="17946000" />
       <workItem from="1738748838255" duration="10825000" />
-      <workItem from="1738827347147" duration="2305000" />
+      <workItem from="1738827347147" duration="2421000" />
+      <workItem from="1738830030202" duration="80000" />
+      <workItem from="1738837937839" duration="724000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -381,7 +382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738758303114</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="jar 파일 교체 기능 수정">
+      <option name="closed" value="true" />
+      <created>1738829729245</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1738829729245</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,6 +431,7 @@
     <MESSAGE value="port, mode, jar 파일 수정 파트 작성(mode, jar 이슈 있음)" />
     <MESSAGE value="기타" />
     <MESSAGE value="기본 생성자 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="기본 생성자 추가" />
+    <MESSAGE value="jar 파일 교체 기능 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="jar 파일 교체 기능 수정" />
   </component>
 </project>

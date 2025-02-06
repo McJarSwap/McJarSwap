@@ -7,7 +7,7 @@ import axiosInstance from "../api/axios";
 const SettingsScreen = ({ onClose, initialMode, onSave }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [selectedMode, setSelectedMode] = useState(location.state?.type || "Survival");
+    const [selectedMode, setSelectedMode] = useState(location.state?.type || "survival");
     const queryParams = new URLSearchParams(location.search);
     const queryPort = queryParams.get("port") || "";
 
@@ -15,7 +15,7 @@ const SettingsScreen = ({ onClose, initialMode, onSave }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isPortValid, setIsPortValid] = useState(null);
 
-    const { roomName = "Default Room", type = "Survival" } = location.state || {};
+    const { roomName = "Default Room", type = "survival" } = location.state || {};
 
     const handleClose = () => {
         navigate('/');
@@ -153,20 +153,20 @@ const SettingsScreen = ({ onClose, initialMode, onSave }) => {
                 <label className="settings-label">Game Mode</label>
                 <div className="settings-radio-group">
                     <button
-                        className={`mode-button ${selectedMode === "Survival" ? "selected survival" : ""}`}
-                        onClick={() => setSelectedMode("Survival")}
+                        className={`mode-button ${selectedMode === "survival" ? "selected survival" : ""}`}
+                        onClick={() => setSelectedMode("survival")}
                     >
                         Survival
                     </button>
                     <button
-                        className={`mode-button ${selectedMode === "Creative" ? "selected creative" : ""}`}
-                        onClick={() => setSelectedMode("Creative")}
+                        className={`mode-button ${selectedMode === "creative" ? "selected creative" : ""}`}
+                        onClick={() => setSelectedMode("creative")}
                     >
                         Creative
                     </button>
                     <button
-                        className={`mode-button ${selectedMode === "Adventure" ? "selected adventure" : ""}`}
-                        onClick={() => setSelectedMode("Adventure")}
+                        className={`mode-button ${selectedMode === "adventure" ? "selected adventure" : ""}`}
+                        onClick={() => setSelectedMode("adventure")}
                     >
                         Adventure
                     </button>

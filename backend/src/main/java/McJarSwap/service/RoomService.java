@@ -94,6 +94,7 @@ public class RoomService {
 
             // 업로드된 JAR 파일 저장 경로
             String serverDir = rootDir + port;
+
             File directory = new File(serverDir);
             if (!directory.exists()) {
                 directory.mkdirs();
