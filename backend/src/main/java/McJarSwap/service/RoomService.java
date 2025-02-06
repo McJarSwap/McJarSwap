@@ -257,10 +257,7 @@ public class RoomService {
             //System.out.println("Pid : " + pid);
 
             // 1. 포트 변경
-            if (changeport != null) {
-
-                System.out.println("왜이러는거야?00" + changeport); //Todo <jar 교체할 때 이쪽으로 들어옴>
-
+            if (!changeport.isEmpty()) {
 
                 String newServerDir = rootDir + changeport; //changeport 로 인해 이름이 변경된 디렉토리 주소
                 File newServerFolder = new File(newServerDir);
@@ -288,7 +285,7 @@ public class RoomService {
             }
 
             // 2. 모드 변경
-            if (mode != null) {
+            if (!mode.isEmpty()) {
 
                 //서버 중단
                 if (pid != null) stopServer(pid);
@@ -307,7 +304,7 @@ public class RoomService {
             }
 
             // 3. JAR 파일 교체 (file 이 존재할 경우) 현재 모든 jar 파일의 이름 server.jar 라고 가정
-            if (file != null && !file.isEmpty()) {
+            if (!file.isEmpty()) {
 
                 //서버 중단
                 if (pid != null) stopServer(pid);
