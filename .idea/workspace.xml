@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="임시로 rootDir 추가, pid 찾는 command 수정">
+    <list default="true" id="91533b27-c5c7-4afb-8111-d71c79b0520c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/RoomSettings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/McJarSwap/service/RoomService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -180,7 +178,8 @@
       <workItem from="1738494072596" duration="70000" />
       <workItem from="1738494159414" duration="1315000" />
       <workItem from="1738660847783" duration="17946000" />
-      <workItem from="1738748838255" duration="9240000" />
+      <workItem from="1738748838255" duration="10825000" />
+      <workItem from="1738827347147" duration="2305000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -358,7 +357,31 @@
       <option name="project" value="LOCAL" />
       <updated>1738678973548</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="port, mode, jar 파일 수정 파트 작성(mode, jar 이슈 있음)">
+      <option name="closed" value="true" />
+      <created>1738758261657</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1738758261657</updated>
+    </task>
+    <task id="LOCAL-00024" summary="기타">
+      <option name="closed" value="true" />
+      <created>1738758278129</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1738758278129</updated>
+    </task>
+    <task id="LOCAL-00025" summary="기본 생성자 추가">
+      <option name="closed" value="true" />
+      <created>1738758303114</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1738758303114</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -396,6 +419,9 @@
     <MESSAGE value="addroom, saveSettings" />
     <MESSAGE value="addroom 구현 - mode 수정만 작동안함" />
     <MESSAGE value="임시로 rootDir 추가, pid 찾는 command 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="임시로 rootDir 추가, pid 찾는 command 수정" />
+    <MESSAGE value="port, mode, jar 파일 수정 파트 작성(mode, jar 이슈 있음)" />
+    <MESSAGE value="기타" />
+    <MESSAGE value="기본 생성자 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="기본 생성자 추가" />
   </component>
 </project>
