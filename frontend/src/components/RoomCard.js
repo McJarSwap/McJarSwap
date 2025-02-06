@@ -41,9 +41,9 @@ const RoomCard = ({ roomName, port, type }) => {
     };
 
     const typeColor =
-        type === "Survival" ? "red" :
-            type === "Creative" ? "blue" :
-                type === "Adventure" ? "green" : "default";
+        type === "survival" ? "red" :
+            type === "creative" ? "blue" :
+                type === "adventure" ? "green" : "default";
 
     return (
         <div className="room-card">
