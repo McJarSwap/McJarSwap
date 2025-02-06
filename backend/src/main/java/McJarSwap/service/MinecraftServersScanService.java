@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class MinecraftServersScanService {
 
-    public final String rootDir = "\\\\wsl.localhost\\Ubuntu\\";
+    //public final String rootDir = "\\\\wsl.localhost\\Ubuntu\\";
 
     public List<Room> scanMinecraftServers() {
         List<Room> rooms = new ArrayList<>();
@@ -29,7 +29,7 @@ public class MinecraftServersScanService {
                 if (folderPath == null || folderPath.isEmpty()) continue;
 
                 // Step 3: server.properties 파일에서 정보 읽기
-                File propertiesFile = new File(rootDir + folderPath + "/server.properties");
+                File propertiesFile = new File(folderPath + "/server.properties");
                 if (!propertiesFile.exists()) continue;
 
                 Room room = parseServerProperties(propertiesFile);
@@ -48,7 +48,7 @@ public class MinecraftServersScanService {
 
     private List<String> getPIDs() throws Exception {
         List<String> pids = new ArrayList<>();
-        //String command = " \"unset $(compgen -v); ps aux | grep '[M]cJarSwap'  | awk '{print $2}'\""; << pid 안찾아짐
+        //String command = " \"unset $(compgen -v); ps aux | grep '[M]cJarSwap'  | awk '{print $2}'\""; //<< pid 안찾아짐
         //아래 명령어 : server.jar 를 포함하는 java 프로세스의 pid 반환
         String command = "pgrep -f 'java.*server.jar'";
 

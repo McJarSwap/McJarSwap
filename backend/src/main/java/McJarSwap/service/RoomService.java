@@ -22,23 +22,19 @@ import java.util.stream.Collectors;
 @Service
 public class RoomService {
 
-    //초기 데이터 임의로 설정
-    /*
-    private final List<Room> rooms = new ArrayList<>(Arrays.asList(
-           new Room("12345", "방 이름 1", "Creative"),
-           new Room("12346", "방 이름 2", "Survival"),
-           new Room("12347", "방 이름 3", "Adventure")
-    ));
-     */
     private final List<Room> rooms = new ArrayList<>();
     private final MinecraftServersScanService scanService;
-    //이 뒤에 port를 붙여서 경로 사용. ex) port=12345면 kkang5430\\minecraft_server12345
-    private final String rootDir = "\\\\wsl.localhost\\Ubuntu\\home\\kkang5430\\minecraft_server";
+    private final String rootDir;  //이 뒤에 port를 붙여서 경로 사용. ex) port=12345면 minecraft_server12345
 
 
     @Autowired
     public RoomService(MinecraftServersScanService scanService) {
         this.scanService = scanService;
+
+        //현재 작업 디렉토리의 부모 디렉토리에 /minecraft_server 붙인 주소
+        this.rootDir = new File(System.getProperty("user.home"), "minecraft_server").getPath();
+        //System.out.println("설정된 rootDir: " + this.rootDir);
+
         loadRoomsFromScan();
     }
 
@@ -88,6 +84,7 @@ public class RoomService {
     public boolean makeServer(MultipartFile file, String dataJson) {
 
         try {
+
             // JSON 데이터를 Room 객체로 변환
             Room room = new ObjectMapper().readValue(dataJson, Room.class);
             String port = room.getPort();
@@ -177,8 +174,6 @@ public class RoomService {
 
     //server.properties 파일 room 의 name, port, mode 로 수정
     public void editProperties(File propertiesFile, Room room) {
-
-        System.out.println("mode :" + room.getMode());
 
         try {
             List<String> lines = new ArrayList<>();
@@ -331,6 +326,7 @@ public class RoomService {
         }
     }
 
+
     //서버 중지
     public void stopServer(String pid) throws Exception {
         String command = "kill -9 " + pid;
@@ -339,15 +335,16 @@ public class RoomService {
 
     //서버 시작
     public void startServer(Room room, File Directory) throws Exception {
-        String command = "java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui";
+        //nohup : Spring Boot 와 독립적으로 실행 disown : Spring Boot 종료해도 서버 유지
+        String command = "nohup java -Xmx" + room.getXmx() + "M -Xms" + room.getXms() + "M -jar server.jar nogui  > server.log 2>&1 & disown";
         executeCommandByDir(command, Directory);
     }
 
     //changeport 로 변경된 이름의 dir 만들고 기존 dir 의 파일 옮기는 메서드
     private boolean moveDirectoryWithCommand(File source, File target) {
         try {
-            String sourcePath = convertToWslPath(source.getAbsolutePath());
-            String targetPath = convertToWslPath(target.getAbsolutePath());
+            String sourcePath = source.getPath().replace("\\", "/");
+            String targetPath = target.getPath().replace("\\", "/");
 
             String command = "mv " + sourcePath + " " + targetPath;
             //System.out.println(command);
@@ -366,13 +363,6 @@ public class RoomService {
             return false;
         }
     }
-
-    //wsl 에서 인식되는 경로로 변환
-    private String convertToWslPath(String windowsPath) {
-        return windowsPath.replace("\\", "/").replace("//wsl.localhost/Ubuntu", "");
-    }
-
-
 
 
     // 실행 중인 서버가 있는지 확인하고 삭제하는 메서드
@@ -396,13 +386,16 @@ public class RoomService {
 
             try {
                 // 실행 중인 서버 프로세스 ID 찾기
-                String pid = getProcessIdByPort(port);
+                String pid = getPidByPort(port);
                 if (pid != null) {
                     executeCommand("kill -9 " + pid);
                 }
 
                 // 서버 폴더 삭제
                 String folderPath = getFolderPathByPort(port);
+
+                System.out.println("Path : " + folderPath);
+
                 if (folderPath != null) {
                     executeCommand("rm -rf " + folderPath);
                 }
@@ -439,7 +432,7 @@ public class RoomService {
 
     // 특정 포트의 서버 실행 경로 찾기
     private String getFolderPathByPort(String port) throws Exception {
-        return scanService.getFolderPath(getProcessIdByPort(port));
+        return scanService.getFolderPath(getPidByPort(port));
     }
 
     // 리눅스 명령어 실행 메서드
