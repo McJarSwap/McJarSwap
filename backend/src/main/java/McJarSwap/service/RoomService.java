@@ -364,52 +364,93 @@ public class RoomService {
         }
     }
 
-
     // 실행 중인 서버가 있는지 확인하고 삭제하는 메서드
     public boolean deleteRoomByPort(String port) {
         Optional<Room> roomOptional = findRoomByPort(port);
+        if (roomOptional.isEmpty()) {
+            System.out.println("해당 포트의 방을 찾을 수 없습니다: " + port);
+            return false;
+        }
 
-        if (roomOptional.isPresent()) {
-            Room room = roomOptional.get();
+        Room room = roomOptional.get();
+        System.out.println("찾은 방 정보: " + room);
 
-            // 실행 중인 서버 리스트 가져오기 (scan 기능 활용)
-            List<Room> runningServers = scanService.scanMinecraftServers();
+        // 🛠 현재 실행 중인 디렉토리에서 두 단계 위로 이동
+        // TODO 투두까진 아니고 체크해야 하는게 나는 backend 파일에서 실행되는걸로
+        //  처리되어서 부모디렉토리로 두번 올라갔는데 실제로 jar 파일로 실행할떄는 한번만 올라가도 될지도
+        File currentDir = new File(System.getProperty("user.dir"));
+        File parentDir = currentDir.getParentFile(); // 첫 번째 부모
+        if (parentDir != null) {
+            parentDir = parentDir.getParentFile(); // 두 번째 부모
+        }
 
-            // 실행 중인지 확인
-            boolean isRunning = runningServers.stream()
-                    .anyMatch(r -> r.getPort().equals(port));
+        if (parentDir == null || !parentDir.exists()) {
+            System.err.println("상위 두 단계 디렉토리를 찾을 수 없습니다: " + currentDir.getAbsolutePath());
+            return false;
+        }
 
-            if (!isRunning) {
-                System.out.println("실행 중인 서버가 아닙니다: " + port);
-                return false;
-            }
+        // 🔍 두 단계 위 디렉토리에서 서버 폴더 찾기
+        String folderName;
+        try {
+            folderName = getFolderPathByPort(port);
+        } catch (Exception e) {
+            System.err.println("서버 폴더 이름을 가져오는 중 오류 발생: " + e.getMessage());
+            return false;
+        }
 
+        File folderPath = new File(parentDir, folderName);
+
+        if (!folderPath.exists() || !folderPath.isDirectory()) {
+            System.err.println("상위 디렉토리에서 서버 폴더를 찾을 수 없습니다: " + folderPath.getAbsolutePath());
+            return false;
+        }
+
+        System.out.println("상위 디렉토리에서 찾은 서버 폴더 경로: " + folderPath.getAbsolutePath());
+        return deleteRoomByFolder(folderPath, room, port);
+    }
+
+
+    // 실제로 삭제하는 메서드
+    private boolean deleteRoomByFolder(File folderPath, Room room, String port) {
+        boolean isRunning = scanService.scanMinecraftServers()
+                .stream()
+                .anyMatch(r -> r.getPort().equals(port));
+
+        if (isRunning) {
             try {
-                // 실행 중인 서버 프로세스 ID 찾기
                 String pid = getPidByPort(port);
-                if (pid != null) {
+                if (pid != null && !pid.isBlank()) {
                     executeCommand("kill -9 " + pid);
+                    System.out.println("서버 프로세스 종료: PID = " + pid);
                 }
-
-                // 서버 폴더 삭제
-                String folderPath = getFolderPathByPort(port);
-
-                System.out.println("Path : " + folderPath);
-
-                if (folderPath != null) {
-                    executeCommand("rm -rf " + folderPath);
-                }
-
-                // Room 목록에서 삭제
-                rooms.remove(room);
-                return true;
-
+                Thread.sleep(1000);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("서버 종료 중 오류 발생: " + e.getMessage());
                 return false;
             }
         }
-        return false;
+
+        try {
+            if (folderPath.exists() && folderPath.isDirectory()) {
+                System.out.println("서버 폴더 존재 확인됨, 삭제 진행: " + folderPath.getAbsolutePath());
+                executeCommand("rm -rf " + folderPath.getAbsolutePath());
+                System.out.println("서버 폴더 삭제 완료: " + folderPath.getAbsolutePath());
+            } else {
+                System.err.println("폴더가 존재하지 않음, 삭제 불가: " + folderPath.getAbsolutePath());
+                return false;
+            }
+
+            synchronized (rooms) {
+                rooms.remove(room);
+            }
+
+            System.out.println("방 삭제 완료: " + port);
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("서버 폴더 삭제 중 오류 발생: " + e.getMessage());
+            return false;
+        }
     }
 
     //port 로 pid 만 가져오기 (getProcessIdByPort()는 한줄 그대로 반환)
@@ -432,7 +473,8 @@ public class RoomService {
 
     // 특정 포트의 서버 실행 경로 찾기
     private String getFolderPathByPort(String port) throws Exception {
-        return scanService.getFolderPath(getPidByPort(port));
+        String fullPath = scanService.getFolderPath(getPidByPort(port)); // 전체 경로 가져오기
+        return new File(fullPath).getName(); // 마지막 폴더 이름만 반환
     }
 
     // 리눅스 명령어 실행 메서드
