@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/McJarSwap.iml" filepath="$PROJECT_DIR$/.idea/modules/McJarSwap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/152431162/McJarSwap.iml" filepath="$PROJECT_DIR$/.idea/modules/152431162/McJarSwap.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/McJarSwap.main.iml" filepath="$PROJECT_DIR$/.idea/modules/McJarSwap.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/McJarSwap.test.iml" filepath="$PROJECT_DIR$/.idea/modules/McJarSwap.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.McJarSwap.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.McJarSwap.iml" />
