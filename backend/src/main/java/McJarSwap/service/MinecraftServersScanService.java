@@ -46,7 +46,7 @@ public class MinecraftServersScanService {
         return rooms;
     }
 
-    private List<String> getPIDs() throws Exception {
+    List<String> getPIDs() throws Exception {
         List<String> pids = new ArrayList<>();
         //String command = " \"unset $(compgen -v); ps aux | grep '[M]cJarSwap'  | awk '{print $2}'\""; //<< pid 안찾아짐
         //아래 명령어 : server.jar 를 포함하는 java 프로세스의 pid 반환
