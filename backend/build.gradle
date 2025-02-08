@@ -28,17 +28,16 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
 application {
 	mainClass = 'McJarSwap.McJarSwapApplication'
 }
+
+bootJar {
+	archiveFileName = 'McJarSwap.jar' // 원하는 파일명 설정
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 jar {
-	duplicatesStrategy = DuplicatesStrategy.INCLUDE
-	manifest {
-		attributes(
-				'Main-Class': 'McJarSwap.McJarSwapApplication'
-		)
-	}
-	from {
-		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-	}
+	enabled = false // 일반 JAR 파일 생성을 비활성화 (Spring Boot는 bootJar 사용)
 }
