@@ -13,7 +13,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // 모든 경로 허용
-                        .allowedOrigins("*") // 프론트엔드 도메인 허용
+                        .allowedOrigins("{프론트엔드 서버 주소 입력}") // 프론트엔드 도메인 허용
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
                         .allowedHeaders("*")
                         .allowCredentials(true);
