@@ -53,29 +53,7 @@ project-root
 
 
 ## 팀원
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/ChabinHwang">
-        <img src="https://github.com/ChabinHwang.png" width="100px;" alt="ChabinHwang"/>
-        <br />
-        <sub><b>ChabinHwang</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/bashdas">
-        <img src="https://github.com/bashdas.png" width="100px;" alt="bashdas"/>
-        <br />
-        <sub><b>bashdas</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/wvwwvv">
-        <img src="https://github.com/wvwwvv.png" width="100px;" alt="wvwwvv"/>
-        <br />
-        <sub><b>wvwwvv</b></sub>
-      </a>
-    </td>
-  </tr>
-</table>
-
+| | | |
+|---|---|---|
+| <img src="https://github.com/ChabinHwang.png" width="100px" alt="ChapinHwang"/> | <img src="https://github.com/bashdas.png" width="100px" alt="bashdas"/> | <img src="https://github.com/wvwwvv.png" width="100px" alt="wwwwv"/> |
+| [ChabinHwang](https://github.com/ChabinHwang) | [bashdas](https://github.com/bashdas) | [wwwwv](https://github.com/wvwwvv) |
