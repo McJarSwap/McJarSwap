@@ -16,11 +16,9 @@ import java.util.stream.Collectors;
 public class MainController {
 
     private RoomService roomService;
-    private ObjectMapper objectMapper; // json을 room객체로 변환에 사용
 
     public MainController(RoomService roomService, ObjectMapper objectMapper) {
         this.roomService = roomService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
@@ -68,8 +66,6 @@ public class MainController {
         }
     }
 
-    // @GetMapping("/delete")
-    // localhost 에서는 GetMapping 으로 해야 정상작동
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteRoom(@RequestParam("port") String port) {
         boolean deleted = roomService.deleteRoomByPort(port);

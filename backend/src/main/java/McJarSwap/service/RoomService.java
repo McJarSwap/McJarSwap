@@ -422,14 +422,6 @@ public class RoomService {
         }
     }
 
-    // 특정 포트에서 실행 중인 프로세스 ID 찾기
-    private String getProcessIdByPort(String port) throws Exception {
-        Process process = executeCommand("lsof -i :" + port + " | grep LISTEN | awk '{print $2}'");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            return reader.readLine(); // 첫 번째 줄이 PID
-        }
-    }
-
     // 특정 포트의 서버 실행 경로 찾기
     private String getFolderPathByPort(String port) throws Exception {
         return scanService.getFolderPath(getPidByPort(port));
