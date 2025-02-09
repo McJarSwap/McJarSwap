@@ -30,7 +30,10 @@ project-root
 │   ├── src
 │   │   └── components
 └── ⚙️backend
-    └── (추후 수정 예정)
+    └── src
+        └── main
+            └── java.McJarSwap
+                └── service
 ```
 
 ---
