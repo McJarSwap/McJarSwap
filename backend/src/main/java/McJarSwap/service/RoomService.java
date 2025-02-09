@@ -35,12 +35,11 @@ public class RoomService {
         this.rootDir = new File(System.getProperty("user.home"), "minecraft_server").getPath();
         //System.out.println("설정된 rootDir: " + this.rootDir);
 
-        //loadRoomsFromScan();
+        loadRoomsFromScan();
     }
 
     // Room 객체 리스트를 Map 리스트로 변환하는 새로운 메서드
     public List<Map<String, String>> getRoomsAsMap() {
-        loadRoomsFromScan();
         return rooms.stream()
                 .map(this::convertRoomToMap)
                 .collect(Collectors.toList());
