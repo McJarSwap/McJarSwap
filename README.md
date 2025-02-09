@@ -27,20 +27,24 @@ Minecraft 게임 서버의 jar 파일을 손쉽게 관리하고, 서버의 정�
 project-root
 ├── 🖥️frontend
 │   ├── public
-│   ├── src
-│   │   └── components
+│   └── src
+│       └── components
 └── ⚙️backend
-    └── (추후 수정 예정)
+    └── src
+        └── main
+            └── java.McJarSwap
+                └── service
 ```
 
 ---
 
 ## 🚀 설치 및 실행 방법
 
-1. [중요] ubuntu 홈 디렉토리에서, `git clone https://github.com/McJarSwap/McJarSwap.git` 명령어를 통해 설치한다.
-2. {홈 디렉토리 경로}/McJarSwap/frontend 로 이동 후, npm start로 프론트엔드를 실행한다.
-3. (백엔드 경로와 실행방법 추가해야함)
-4. 포트포워딩을 통해 서버ip:(프론트 서버 포트번호)로 접속한다.
+1. McJarSwap/backend/src/main/McJarSwap/WebConfig.java 파일로 이동하여 배포할 프론트엔드 주소를 입력한다.
+2. backend의 build.gradle을 활용해 FatJAR을 생성한다. 생성된 FatJAR을 우분투 서버에 업로드한다. 우분투 서버에서 git clone를 활용해 프론트엔드를 내려받는다.
+3. [Ubuntu] {홈 디렉토리 경로}/McJarSwap/frontend 로 이동 후, npm start로 프론트엔드를 실행한다.
+4. [Ubuntu] **2**에서 업로드한 FatJar을 java -jar McJarSwap.jar로 실행한다.
+5. [Ubuntu] 서버ip:(프론트 서버 포트번호)로 접속한다.
 
 ---
 
@@ -50,5 +54,9 @@ project-root
 - setting 버튼을 통해 서버 정보와 버전을 변경
 - 휴지통 아이콘을 통해 서버를 정지하고 폴더를 제거
 
-## 기여자
-(추후 수정 예정)
+
+## 팀원
+| | | |
+|---|---|---|
+| <img src="https://github.com/ChabinHwang.png" width="100px" alt="ChapinHwang"/> | <img src="https://github.com/bashdas.png" width="100px" alt="bashdas"/> | <img src="https://github.com/wvwwvv.png" width="100px" alt="wwwwv"/> |
+| [ChabinHwang](https://github.com/ChabinHwang) | [bashdas](https://github.com/bashdas) | [wwwwv](https://github.com/wvwwvv) |
