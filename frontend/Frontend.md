@@ -1,4 +1,4 @@
-# 🏡 McJarSwap - Frontend
+# 🏡 Minecraft Server Jar Swap  - Frontend
 <img src="https://skillicons.dev/icons?i=js,css,react"><br>
 ## 1. 개요
 
@@ -51,7 +51,7 @@
 
 ---
 
-## 3. 결론
+## 3. 구조 요약
 
 이 애플리케이션은 다음과 같은 구조를 가집니다.
 
